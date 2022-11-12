@@ -19,11 +19,13 @@ export class UsersService {
   }
 
   async findAll() {
-    return await this.userModel.find();
+    return await this.userModel.find().populate(['created_by', 'updated_by']);
   }
 
   async findOne(id: string) {
-    return await this.userModel.findById(id);
+    return await this.userModel
+      .findById(id)
+      .populate(['created_by', 'updated_by']);
   }
 
   async findByUsername(username: string): Promise<any | undefined> {

@@ -20,4 +20,8 @@ export class CreateUserDto {
   @IsEnum(Role)
   @IsNotEmpty()
   role: string;
+
+  created_by: string;
+
+  updated_by: string;
 }

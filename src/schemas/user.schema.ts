@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { now } from 'mongoose';
+import { BaseSchema } from './utils/base.schema';
 
 export enum Role {
   Admin = 'ADMIN',
@@ -19,7 +19,7 @@ export type UserDocument = User & Document;
     },
   },
 })
-export class User {
+export class User extends BaseSchema {
   @Prop({
     required: true,
     type: String,
@@ -39,18 +39,6 @@ export class User {
     default: Role.Worker,
   })
   role: Role;
-
-  @Prop({
-    default: now(),
-    type: Date,
-  })
-  created_at: Date;
-
-  @Prop({
-    type: Date,
-    default: null,
-  })
-  updated_at: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
