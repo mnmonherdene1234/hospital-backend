@@ -1,27 +1,44 @@
 import { Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
-import { UserDocument } from 'src/schemas/user.schema';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model, now } from 'mongoose';
+import { User, UserDocument } from 'src/schemas/user.schema';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly userModel: Model<UserDocument>) {}
-  create(){
-    
-  }
-  private readonly users = [
-    {
-      userId: 1,
-      username: 'john',
-      password: 'changeme',
-    },
-    {
-      userId: 2,
-      username: 'maria',
-      password: 'guess',
-    },
-  ];
+  constructor(
+    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+  ) {}
 
-  async findOne(username: string): Promise<any | undefined> {
-    return this.users.find((user) => user.username === username);
+  async create(createUserDto: CreateUserDto) {
+    const salt = await bcrypt.genSalt();
+    const password = await bcrypt.hash(createUserDto.password, salt);
+    return await new this.userModel({ ...createUserDto, password }).save();
+  }
+
+  async findAll() {
+    return await this.userModel.find();
+  }
+
+  async findOne(id: string) {
+    return await this.userModel.findById(id);
+  }
+
+  async findByUsername(username: string): Promise<any | undefined> {
+    return await this.userModel.findOne({ username });
+  }
+
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const salt = await bcrypt.genSalt();
+    const password = await bcrypt.hash(updateUserDto.password, salt);
+    return await this.userModel.findByIdAndUpdate(id, {
+      $set: { ...updateUserDto, password, updated_at: now() },
+    });
+  }
+
+  async remove(id: string) {
+    return await this.userModel.findByIdAndDelete(id);
   }
 }
