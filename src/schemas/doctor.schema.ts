@@ -2,10 +2,10 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { BaseSchema } from './utils/base.schema';
 import transform from './utils/transform';
 
-export type CustomerDocument = Customer & Document;
+export type DoctorDocument = Doctor & Document;
 
 @Schema(transform)
-export class Customer extends BaseSchema {
+export class Doctor extends BaseSchema {
   @Prop({
     required: true,
     type: String,
@@ -15,12 +15,17 @@ export class Customer extends BaseSchema {
   @Prop({
     type: String,
   })
-  phone: string;
+  email: string;
 
   @Prop({
     type: String,
   })
-  email: string;
+  phone: string;
+
+  @Prop({
+    type: Number,
+  })
+  salary: number;
 }
 
-export const CustomerSchema = SchemaFactory.createForClass(Customer);
+export const DoctorSchema = SchemaFactory.createForClass(Doctor);

@@ -2,17 +2,7 @@ import { Prop, Schema } from '@nestjs/mongoose';
 import mongoose, { now } from 'mongoose';
 import { User } from '../user.schema';
 
-@Schema({
-  toJSON: {
-    transform: (doc: any, ret: any) => {
-      ret.id = ret._id;
-      delete ret._id;
-      delete ret.__v;
-      delete ret.password;
-      return ret;
-    },
-  },
-})
+@Schema()
 export class BaseSchema {
   @Prop({
     type: Date,
