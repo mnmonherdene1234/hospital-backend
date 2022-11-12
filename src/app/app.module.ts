@@ -7,7 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CustomerModule } from './customers/customers.module';
 import { DoctorsModule } from './doctors/doctors.module';
-import { LoggerMiddleware } from './logger.middleware';
+import { LoggerMiddleware } from './utils/logger.middleware';
 
 @Module({
   imports: [
