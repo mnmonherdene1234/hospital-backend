@@ -34,7 +34,7 @@ export class TreatmentsService {
   async findOne(id: string) {
     return await this.treatmentModel
       .findById(id)
-      .populate(['created_by', 'updated_by']);
+      .populate(['doctor', 'customer', 'service', 'created_by', 'updated_by']);
   }
 
   async exists(id: string) {
