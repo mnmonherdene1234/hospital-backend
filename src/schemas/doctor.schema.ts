@@ -6,6 +6,8 @@ export type DoctorDocument = Doctor & Document;
 
 @Schema(transform)
 export class Doctor extends BaseSchema {
+  static schemaName: string = 'doctors';
+
   @Prop({
     required: true,
     type: String,

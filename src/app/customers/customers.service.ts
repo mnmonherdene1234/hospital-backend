@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, now } from 'mongoose';
 import { Customer, CustomerDocument } from 'src/schemas/customer.schema';
@@ -10,7 +10,7 @@ import { UpdateCustomerDto } from './dto/update-customer.dto';
 @Injectable()
 export class CustomersService {
   constructor(
-    @InjectModel(Customer.name)
+    @InjectModel(Customer.schemaName)
     private readonly customerModel: Model<CustomerDocument>,
   ) {}
 
@@ -28,11 +28,9 @@ export class CustomersService {
       .populate(['created_by', 'updated_by']);
   }
 
-  async search(value: any) {
-    const regexp = new RegExp(value, 'i');
-    return await this.customerModel.find({
-      $or: [{ name: regexp }, { email: regexp }, { phone: regexp }],
-    });
+  async exists(id: string) {
+    if (!(await this.customerModel.exists({ _id: id })))
+      throw new NotFoundException('CUSTOMER_NOTFOUND');
   }
 
   async update(id: string, updateCustomerDto: UpdateCustomerDto) {

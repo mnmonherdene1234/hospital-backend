@@ -7,11 +7,11 @@ import { CustomersService } from './customers.service';
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: Customer.name, schema: CustomerSchema },
+      { name: Customer.schemaName, schema: CustomerSchema },
     ]),
   ],
   controllers: [CustomersController],
   providers: [CustomersService],
   exports: [CustomersService, MongooseModule],
 })
-export class CustomerModule {}
+export class CustomersModule {}

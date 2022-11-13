@@ -20,6 +20,8 @@ export type UserDocument = User & Document;
   },
 })
 export class User extends BaseSchema {
+  static schemaName: string = 'users';
+
   @Prop({
     required: true,
     type: String,

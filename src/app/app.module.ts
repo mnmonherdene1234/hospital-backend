@@ -5,10 +5,11 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { CustomerModule } from './customers/customers.module';
+import { CustomersModule } from './customers/customers.module';
 import { DoctorsModule } from './doctors/doctors.module';
 import { LoggerMiddleware } from './utils/logger.middleware';
 import { ServicesModule } from './services/services.module';
+import { TreatmentsModule } from './treatments/treatments.module';
 
 @Module({
   imports: [
@@ -16,9 +17,10 @@ import { ServicesModule } from './services/services.module';
     MongooseModule.forRoot(process.env.MONGODB_URI),
     AuthModule,
     UsersModule,
-    CustomerModule,
+    CustomersModule,
     DoctorsModule,
     ServicesModule,
+    TreatmentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

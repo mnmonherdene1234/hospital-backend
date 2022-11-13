@@ -6,6 +6,8 @@ export type ServiceDocument = Service & Document;
 
 @Schema(transform)
 export class Service extends BaseSchema {
+  static schemaName: string = 'services';
+
   @Prop({
     required: true,
     type: String,
