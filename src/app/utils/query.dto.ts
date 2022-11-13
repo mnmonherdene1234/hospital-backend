@@ -26,6 +26,12 @@ export default class QueryDto {
   @IsOptional()
   sort: string = '';
 
+  @IsOptional()
+  populate: string | string[] = ['created_by', 'updated_by'];
+
+  @IsOptional()
+  select: any = "";
+
   @IsObject()
   @IsOptional()
   @ValidateNested()

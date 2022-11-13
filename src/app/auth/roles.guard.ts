@@ -28,6 +28,6 @@ export class RolesGuard implements CanActivate {
     if (!user) throw new UnauthorizedException();
     const foundUser = await this.usersService.findOne(user.id);
 
-    return requiredRoles.some((role) => foundUser.role === role);
+    return requiredRoles.some((role) => foundUser?.role === role);
   }
 }

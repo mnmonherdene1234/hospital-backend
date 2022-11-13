@@ -8,6 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { CustomerModule } from './customers/customers.module';
 import { DoctorsModule } from './doctors/doctors.module';
 import { LoggerMiddleware } from './utils/logger.middleware';
+import { ServicesModule } from './services/services.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { LoggerMiddleware } from './utils/logger.middleware';
     UsersModule,
     CustomerModule,
     DoctorsModule,
+    ServicesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

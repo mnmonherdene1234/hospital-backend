@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -13,6 +14,7 @@ import { Role } from 'src/schemas/user.schema';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
+import QueryDto from '../utils/query.dto';
 import { DoctorsService } from './doctors.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
@@ -30,8 +32,8 @@ export class DoctorsController {
   }
 
   @Get()
-  findAll() {
-    return this.doctorsService.findAll();
+  findAll(@Query() query: QueryDto) {
+    return this.doctorsService.findAll(query);
   }
 
   @Get(':id')

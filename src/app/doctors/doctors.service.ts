@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, now } from 'mongoose';
 import { Doctor, DoctorDocument } from 'src/schemas/doctor.schema';
+import modelFind from '../utils/model-find';
+import QueryDto from '../utils/query.dto';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
@@ -16,8 +18,8 @@ export class DoctorsService {
     return await new this.doctorModel(createDoctorDto).save();
   }
 
-  async findAll() {
-    return await this.doctorModel.find().populate(['created_by', 'updated_by']);
+  async findAll(query: QueryDto) {
+    return await modelFind(this.doctorModel, query);
   }
 
   async findOne(id: string) {
@@ -28,7 +30,7 @@ export class DoctorsService {
 
   async update(id: string, updateDoctorDto: UpdateDoctorDto) {
     return await this.doctorModel.findByIdAndUpdate(id, {
-      $set: { ...updateDoctorDto },
+      $set: { ...updateDoctorDto, updated_at: now() },
     });
   }
 

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, now } from 'mongoose';
 import { Customer, CustomerDocument } from 'src/schemas/customer.schema';
+import modelFind from '../utils/model-find';
 import QueryDto from '../utils/query.dto';
 import { createCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
@@ -18,14 +19,7 @@ export class CustomersService {
   }
 
   async findAll(query: QueryDto) {
-    const { filter, sort, pagination } = query;
-
-    return await this.customerModel
-      .find(filter)
-      .skip((pagination?.page - 1) * pagination?.pageSize)
-      .limit(pagination?.pageSize)
-      .sort(sort)
-      .populate(['created_by', 'updated_by']);
+    return await modelFind(this.customerModel, query);
   }
 
   async findOne(id: string) {
