@@ -25,6 +25,13 @@ export class Doctor extends BaseSchema {
   phone: string;
 
   @Prop({
+    required: false,
+    type: String,
+    default: null,
+  })
+  profile_img: string;
+
+  @Prop({
     type: Number,
   })
   salary: number;

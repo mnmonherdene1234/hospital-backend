@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Treatment, TreatmentSchema } from 'src/schemas/treatment.schema';
 import { CustomersModule } from '../customers/customers.module';
@@ -7,6 +7,7 @@ import { ServicesModule } from '../services/services.module';
 import { TreatmentsController } from './treatments.controller';
 import { TreatmentsService } from './treatments.service';
 
+@Global()
 @Module({
   imports: [
     MongooseModule.forFeature([

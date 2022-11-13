@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, now } from 'mongoose';
 import { Customer, CustomerDocument } from 'src/schemas/customer.schema';
+import { Treatment, TreatmentDocument } from 'src/schemas/treatment.schema';
 import modelFind from '../utils/model-find';
 import QueryDto from '../utils/query.dto';
 import { createCustomerDto } from './dto/create-customer.dto';
@@ -12,6 +13,8 @@ export class CustomersService {
   constructor(
     @InjectModel(Customer.schemaName)
     private readonly customerModel: Model<CustomerDocument>,
+    @InjectModel(Treatment.schemaName)
+    private readonly treatmentModel: Model<TreatmentDocument>,
   ) {}
 
   async create(createCustomerDto: createCustomerDto) {
@@ -44,6 +47,10 @@ export class CustomersService {
   }
 
   async remove(id: string) {
+    await this.treatmentModel.updateMany(
+      { customer: id },
+      { $set: { customer: null } },
+    );
     return await this.customerModel.findByIdAndDelete(id);
   }
 }

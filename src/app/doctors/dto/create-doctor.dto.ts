@@ -1,4 +1,10 @@
-import { IsEmail, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUrl,
+} from 'class-validator';
 
 export class CreateDoctorDto {
   @IsString()
@@ -11,6 +17,9 @@ export class CreateDoctorDto {
   @IsEmail()
   @IsOptional()
   email: string;
+
+  @IsUrl()
+  profile_img: string;
 
   @IsNumber()
   @IsOptional()
