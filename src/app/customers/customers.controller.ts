@@ -41,6 +41,11 @@ export class CustomersController {
     return this.customersService.findOne(id);
   }
 
+  @Get('total/count')
+  count() {
+    return this.customersService.count();
+  }
+
   @Put(':id')
   update(
     @Param('id') id: string,

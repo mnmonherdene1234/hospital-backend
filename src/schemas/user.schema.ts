@@ -41,6 +41,13 @@ export class User extends BaseSchema {
     default: Role.Worker,
   })
   role: Role;
+
+  @Prop({
+    required: false,
+    type: String,
+    default: null,
+  })
+  profile_img: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

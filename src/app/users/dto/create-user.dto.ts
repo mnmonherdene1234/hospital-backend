@@ -2,7 +2,9 @@ import {
   IsAlphanumeric,
   IsEnum,
   IsNotEmpty,
+  IsOptional,
   IsString,
+  IsUrl,
   MinLength,
 } from 'class-validator';
 import { Role } from 'src/schemas/user.schema';
@@ -20,6 +22,10 @@ export class CreateUserDto {
   @IsEnum(Role)
   @IsNotEmpty()
   role: string;
+
+  @IsUrl()
+  @IsOptional()
+  profile_img: string;
 
   created_by: string;
   updated_by: string;

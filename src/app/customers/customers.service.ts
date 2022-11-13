@@ -33,6 +33,10 @@ export class CustomersService {
       throw new NotFoundException('CUSTOMER_NOTFOUND');
   }
 
+  async count() {
+    return await this.customerModel.count();
+  }
+
   async update(id: string, updateCustomerDto: UpdateCustomerDto) {
     return await this.customerModel.findByIdAndUpdate(id, {
       $set: { ...updateCustomerDto, updated_at: now() },

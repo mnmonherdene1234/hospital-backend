@@ -44,15 +44,22 @@ export class UsersService {
       throw new NotFoundException('USER_NOTFOUND');
   }
 
+  async count() {
+    return await this.userModel.count();
+  }
+
   async update(id: string, updateUserDto: UpdateUserDto) {
-    const salt = await bcrypt.genSalt();
-    const password = await bcrypt.hash(updateUserDto.password, salt);
-    const user = await this.userModel.findById(id);
-    if (!user) throw new NotFoundException('USER_NOTFOUND');
-    if (user.role == Role.Admin) throw new BadRequestException('ADMIN_ROLE');
+    if (updateUserDto.password) {
+      const salt = await bcrypt.genSalt();
+      const password = await bcrypt.hash(updateUserDto.password, salt);
+
+      return await this.userModel.findByIdAndUpdate(id, {
+        $set: { ...updateUserDto, password, updated_at: now() },
+      });
+    }
 
     return await this.userModel.findByIdAndUpdate(id, {
-      $set: { ...updateUserDto, password, updated_at: now() },
+      $set: { ...updateUserDto, updated_at: now() },
     });
   }
 

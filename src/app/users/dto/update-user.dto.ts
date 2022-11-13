@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  IsUrl,
   MinLength,
 } from 'class-validator';
 import { Role } from 'src/schemas/user.schema';
@@ -26,6 +27,10 @@ export class UpdateUserDto {
   @IsNotEmpty()
   @IsOptional()
   role: string;
+
+  @IsUrl()
+  @IsOptional()
+  profile_img: string;
 
   created_by: string;
 
