@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { UpdateUserDto } from '../users/dto/update-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -26,5 +27,9 @@ export class AuthService {
 
   async profile(id: string) {
     return await this.usersService.findOne(id);
+  }
+
+  async updateProfile(id: string, updateUserDto: UpdateUserDto) {
+    return await this.usersService.update(id, updateUserDto);
   }
 }

@@ -1,7 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, now } from 'mongoose';
-import { User, UserDocument } from 'src/schemas/user.schema';
+import { Role, User, UserDocument } from 'src/schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
@@ -43,6 +47,10 @@ export class UsersService {
   async update(id: string, updateUserDto: UpdateUserDto) {
     const salt = await bcrypt.genSalt();
     const password = await bcrypt.hash(updateUserDto.password, salt);
+    const user = await this.userModel.findById(id);
+    if (!user) throw new NotFoundException('USER_NOTFOUND');
+    if (user.role == Role.Admin) throw new BadRequestException('ADMIN_ROLE');
+
     return await this.userModel.findByIdAndUpdate(id, {
       $set: { ...updateUserDto, password, updated_at: now() },
     });

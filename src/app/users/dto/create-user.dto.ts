@@ -22,6 +22,5 @@ export class CreateUserDto {
   role: string;
 
   created_by: string;
-
   updated_by: string;
 }

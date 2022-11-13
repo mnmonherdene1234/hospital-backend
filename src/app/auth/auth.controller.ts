@@ -3,10 +3,11 @@ import {
   Controller,
   Get,
   Post,
+  Put,
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { CreateUserDto } from '../users/dto/create-user.dto';
+import { UpdateUserDto } from '../users/dto/update-user.dto';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LocalAuthGuard } from './local-auth.guard';
@@ -25,5 +26,11 @@ export class AuthController {
   @Get('profile')
   profile(@Request() req: any) {
     return this.authService.profile(req.user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('profile')
+  updateProfile(@Body() updateUserDto: UpdateUserDto, @Request() req: any) {
+    return this.authService.updateProfile(req.user.id, updateUserDto);
   }
 }
