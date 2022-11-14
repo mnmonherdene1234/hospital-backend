@@ -3,8 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, now } from 'mongoose';
 import { Customer, CustomerDocument } from 'src/schemas/customer.schema';
 import { Treatment, TreatmentDocument } from 'src/schemas/treatment.schema';
-import modelFind from '../utils/model-find';
-import QueryDto from '../utils/query.dto';
 import { createCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 
@@ -21,8 +19,8 @@ export class CustomersService {
     return await new this.customerModel(createCustomerDto).save();
   }
 
-  async findAll(query: QueryDto) {
-    return await modelFind(this.customerModel, query);
+  async findAll() {
+    return await this.customerModel.find();
   }
 
   async findOne(id: string) {

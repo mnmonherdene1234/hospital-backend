@@ -14,7 +14,6 @@ import { Role } from 'src/schemas/user.schema';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
-import QueryDto from '../utils/query.dto';
 import { CreateTreatmentDto } from './dto/create-treatment.dto';
 import { UpdateTreatmentDto } from './dto/update-treatment.dto';
 import { TreatmentsService } from './treatments.service';
@@ -32,8 +31,8 @@ export class TreatmentsController {
   }
 
   @Get()
-  findAll(@Query() query: QueryDto) {
-    return this.treatmentsService.findAll(query);
+  findAll() {
+    return this.treatmentsService.findAll();
   }
 
   @Get(':id')

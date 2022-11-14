@@ -3,8 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, now } from 'mongoose';
 import { Service, ServiceDocument } from 'src/schemas/service.schema';
 import { Treatment, TreatmentDocument } from 'src/schemas/treatment.schema';
-import modelFind from '../utils/model-find';
-import QueryDto from '../utils/query.dto';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 
@@ -21,8 +19,8 @@ export class ServicesService {
     return await new this.serviceModel(createServiceDto).save();
   }
 
-  async findAll(query: QueryDto) {
-    return await modelFind(this.serviceModel, query);
+  async findAll() {
+    return await this.serviceModel.find();
   }
 
   async findOne(id: string) {

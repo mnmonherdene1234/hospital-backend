@@ -9,13 +9,15 @@ export class Customer extends BaseSchema {
   static schemaName: string = 'customers';
 
   @Prop({
-    required: true,
     type: String,
+    default: 'Нэргүй',
   })
   name: string;
 
   @Prop({
+    required: true,
     type: String,
+    unique: true,
   })
   phone: string;
 

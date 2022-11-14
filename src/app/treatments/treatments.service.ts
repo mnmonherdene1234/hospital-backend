@@ -5,8 +5,6 @@ import { Treatment, TreatmentDocument } from 'src/schemas/treatment.schema';
 import { CustomersService } from '../customers/customers.service';
 import { DoctorsService } from '../doctors/doctors.service';
 import { ServicesService } from '../services/services.service';
-import modelFind from '../utils/model-find';
-import QueryDto from '../utils/query.dto';
 import { CreateTreatmentDto } from './dto/create-treatment.dto';
 import { UpdateTreatmentDto } from './dto/update-treatment.dto';
 
@@ -27,8 +25,10 @@ export class TreatmentsService {
     return await new this.treatmentModel(createTreatmentDto).save();
   }
 
-  async findAll(query: QueryDto) {
-    return await modelFind(this.treatmentModel, query);
+  async findAll() {
+    return await this.treatmentModel
+      .find()
+      .populate(['doctor', 'customer', 'service', 'created_by', 'updated_by']);
   }
 
   async findOne(id: string) {

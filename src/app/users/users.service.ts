@@ -1,16 +1,10 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, now } from 'mongoose';
 import { Role, User, UserDocument } from '../../schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
-import modelFind from '../utils/model-find';
-import QueryDto from '../utils/query.dto';
 
 @Injectable()
 export class UsersService {
@@ -25,8 +19,8 @@ export class UsersService {
     return await new this.userModel({ ...createUserDto, password }).save();
   }
 
-  async findAll(query: QueryDto) {
-    return await modelFind(this.userModel, query);
+  async findAll() {
+    return await this.userModel.find().populate(['created_by', 'updated_by']);
   }
 
   async findOne(id: string) {

@@ -4,7 +4,6 @@ import { Customer, CustomerSchema } from 'src/schemas/customer.schema';
 import { TreatmentsModule } from '../treatments/treatments.module';
 import { UsersModule } from '../users/users.module';
 import { CustomersController } from './customers.controller';
-import { CustomersInfoController } from './customers.info.controller';
 import { CustomersService } from './customers.service';
 
 @Module({
@@ -15,7 +14,7 @@ import { CustomersService } from './customers.service';
     forwardRef(() => TreatmentsModule),
     UsersModule,
   ],
-  controllers: [CustomersController, CustomersInfoController],
+  controllers: [CustomersController],
   providers: [CustomersService],
   exports: [CustomersService, MongooseModule],
 })
