@@ -4,6 +4,7 @@ import { Model, now } from 'mongoose';
 import { Customer, CustomerDocument } from 'src/schemas/customer.schema';
 import { Treatment, TreatmentDocument } from 'src/schemas/treatment.schema';
 import { createCustomerDto } from './dto/create-customer.dto';
+import { CustomerSearchDto } from './dto/customer-search.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 
 @Injectable()
@@ -29,15 +30,6 @@ export class CustomersService {
       .populate(['created_by', 'updated_by']);
   }
 
-  async exists(id: string) {
-    if (!(await this.customerModel.exists({ _id: id })))
-      throw new NotFoundException('CUSTOMER_NOTFOUND');
-  }
-
-  async count() {
-    return await this.customerModel.count();
-  }
-
   async update(id: string, updateCustomerDto: UpdateCustomerDto) {
     return await this.customerModel.findByIdAndUpdate(id, {
       $set: { ...updateCustomerDto, updated_at: now() },
@@ -50,5 +42,25 @@ export class CustomersService {
       { $set: { customer: null } },
     );
     return await this.customerModel.findByIdAndDelete(id);
+  }
+
+  async exists(id: string) {
+    if (!(await this.customerModel.exists({ _id: id })))
+      throw new NotFoundException('CUSTOMER_NOTFOUND');
+  }
+
+  async count() {
+    return await this.customerModel.count();
+  }
+
+  async search(search: CustomerSearchDto) {
+    return await this.customerModel.find({
+      $or: [
+        { first_name: { $regex: `${search.name}`, $options: 'i' } },
+        { last_name: { $regex: `${search.name}`, $options: 'i' } },
+        { phone: { $regex: `${search.phone}`, $options: 'i' } },
+        { email: { $regex: `${search.email}`, $options: 'i' } },
+      ],
+    });
   }
 }

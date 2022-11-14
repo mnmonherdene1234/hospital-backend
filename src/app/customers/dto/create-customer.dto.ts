@@ -1,16 +1,23 @@
 import {
   IsEmail,
+  IsEnum,
   IsNumberString,
   IsOptional,
   IsString,
   MinLength,
 } from 'class-validator';
+import { BloodType, FamilyStatus, Gender } from 'src/schemas/customer.schema';
 
 export class createCustomerDto {
   @IsString()
-  @MinLength(2)
+  @MinLength(1)
   @IsOptional()
-  name: string;
+  first_name: string;
+
+  @IsString()
+  @MinLength(1)
+  @IsOptional()
+  last_name: string;
 
   @MinLength(8)
   @IsNumberString()
@@ -19,6 +26,33 @@ export class createCustomerDto {
   @IsEmail()
   @IsOptional()
   email: string;
+
+  @IsOptional()
+  birthday: Date;
+
+  @IsOptional()
+  @IsEnum(Gender)
+  gender: Gender;
+
+  @IsOptional()
+  @IsEnum(BloodType)
+  blood_type: BloodType;
+
+  @IsOptional()
+  @IsEnum(FamilyStatus)
+  family_status: FamilyStatus;
+
+  @IsString()
+  @IsOptional()
+  address: string;
+
+  @IsString()
+  @IsOptional()
+  image: string;
+
+  @IsString()
+  @IsOptional()
+  others: string;
 
   created_by: string;
   updated_by: string;

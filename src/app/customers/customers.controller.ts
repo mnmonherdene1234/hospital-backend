@@ -16,6 +16,7 @@ import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { CustomersService } from './customers.service';
 import { createCustomerDto } from './dto/create-customer.dto';
+import { CustomerSearchDto } from './dto/customer-search.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 
 @Roles(Role.Admin, Role.Worker)
@@ -58,5 +59,10 @@ export class CustomersController {
   @Get('info/count')
   count() {
     return this.customersService.count();
+  }
+
+  @Get('info/search')
+  search(@Query() query: CustomerSearchDto) {
+    return this.customersService.search(query);
   }
 }
