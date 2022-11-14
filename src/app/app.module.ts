@@ -20,7 +20,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    MongooseModule.forRoot(process.env.MONGODB_URI),
+    MongooseModule.forRoot(process.env.MONGODB_URI, { dbName: process.env.DATABASE_NAME }),
     ThrottlerModule.forRoot({
       ttl: 60,
       limit: 10,

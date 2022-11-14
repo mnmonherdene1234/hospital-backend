@@ -1,21 +1,22 @@
-import { Global, Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Treatment, TreatmentSchema } from 'src/schemas/treatment.schema';
 import { CustomersModule } from '../customers/customers.module';
 import { DoctorsModule } from '../doctors/doctors.module';
 import { ServicesModule } from '../services/services.module';
+import { UsersModule } from '../users/users.module';
 import { TreatmentsController } from './treatments.controller';
 import { TreatmentsService } from './treatments.service';
 
-@Global()
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Treatment.schemaName, schema: TreatmentSchema },
     ]),
-    DoctorsModule,
-    CustomersModule,
-    ServicesModule,
+    UsersModule,
+    forwardRef(() => DoctorsModule),
+    forwardRef(() => CustomersModule),
+    forwardRef(() => ServicesModule),
   ],
   controllers: [TreatmentsController],
   providers: [TreatmentsService],
