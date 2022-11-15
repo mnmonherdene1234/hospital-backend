@@ -27,6 +27,10 @@ export class createCustomerDto {
   @IsOptional()
   email: string;
 
+  @IsString()
+  @IsOptional()
+  desc: string;
+
   @IsOptional()
   birthday: Date;
 
@@ -49,10 +53,6 @@ export class createCustomerDto {
   @IsString()
   @IsOptional()
   image: string;
-
-  @IsString()
-  @IsOptional()
-  others: string;
 
   created_by: string;
   updated_by: string;

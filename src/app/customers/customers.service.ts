@@ -21,7 +21,9 @@ export class CustomersService {
   }
 
   async findAll() {
-    return await this.customerModel.find();
+    return await this.customerModel
+      .find()
+      .populate(['created_by', 'updated_by']);
   }
 
   async findOne(id: string) {

@@ -54,4 +54,9 @@ export class DoctorsController {
   remove(@Param('id') id: string) {
     return this.doctorsService.remove(id);
   }
+
+  @Get('info/count')
+  count() {
+    return this.doctorsService.count();
+  }
 }

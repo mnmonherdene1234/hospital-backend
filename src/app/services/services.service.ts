@@ -20,13 +20,15 @@ export class ServicesService {
   }
 
   async findAll() {
-    return await this.serviceModel.find();
+    return await this.serviceModel
+      .find()
+      .populate(['created_by', 'updated_by', 'services']);
   }
 
   async findOne(id: string) {
     return await this.serviceModel
       .findById(id)
-      .populate(['created_by', 'updated_by']);
+      .populate(['created_by', 'updated_by', 'services']);
   }
 
   async exists(id: string) {

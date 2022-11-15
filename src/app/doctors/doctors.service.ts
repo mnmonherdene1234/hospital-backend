@@ -20,7 +20,7 @@ export class DoctorsService {
   }
 
   async findAll() {
-    return await this.doctorModel.find();
+    return await this.doctorModel.find().populate(['created_by', 'updated_by']);
   }
 
   async findOne(id: string) {
@@ -46,5 +46,9 @@ export class DoctorsService {
       { $set: { customer: null } },
     );
     return await this.doctorModel.findByIdAndDelete(id);
+  }
+
+  async count() {
+    return await this.doctorModel.count();
   }
 }

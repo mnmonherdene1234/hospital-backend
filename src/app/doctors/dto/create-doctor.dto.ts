@@ -5,10 +5,14 @@ import {
   IsString,
   IsUrl,
 } from 'class-validator';
+import { Experience, WorkingHours } from 'src/schemas/doctor.schema';
 
 export class CreateDoctorDto {
   @IsString()
   name: string;
+
+  @IsString()
+  role: string;
 
   @IsString()
   @IsOptional()
@@ -24,6 +28,9 @@ export class CreateDoctorDto {
   @IsNumber()
   @IsOptional()
   salary: number;
+
+  working_hours: WorkingHours[];
+  experiences: Experience[];
 
   created_by: string;
   updated_by: string;

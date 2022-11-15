@@ -49,9 +49,13 @@ export class Customer extends BaseSchema {
 
   @Prop({
     type: String,
-    unique: true,
   })
   email: string;
+
+  @Prop({
+    type: String,
+  })
+  desc: string;
 
   @Prop({
     type: Date,
@@ -85,11 +89,6 @@ export class Customer extends BaseSchema {
     type: String,
   })
   image: string;
-
-  @Prop({
-    type: String,
-  })
-  other: string;
 }
 
 export const CustomerSchema = SchemaFactory.createForClass(Customer);
