@@ -13,14 +13,6 @@ export class CreateTreatmentDto {
   @IsNotEmpty()
   service: string;
 
-  @IsString()
-  @IsNotEmpty()
-  start_time: Date;
-
-  @IsString()
-  @IsNotEmpty()
-  end_time: Date;
-
   created_by: string;
   updated_by: string;
 }

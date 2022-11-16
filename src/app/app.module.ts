@@ -16,6 +16,7 @@ import { LoggerMiddleware } from './utils/logger.middleware';
 import { ServicesModule } from './services/services.module';
 import { TreatmentsModule } from './treatments/treatments.module';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { TreatmentTimesModule } from './treatment-times/treatment-times.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     DoctorsModule,
     ServicesModule,
     TreatmentsModule,
+    TreatmentTimesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

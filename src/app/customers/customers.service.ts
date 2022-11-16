@@ -17,6 +17,15 @@ export class CustomersService {
   ) {}
 
   async create(createCustomerDto: createCustomerDto) {
+    const customer = await this.findByPhone(createCustomerDto.phone);
+    if (customer) {
+      const updated = await this.update(
+        customer.id,
+        createCustomerDto as UpdateCustomerDto,
+      );
+      return await this.findOne(updated.id);
+    }
+
     return await new this.customerModel(createCustomerDto).save();
   }
 
@@ -64,5 +73,15 @@ export class CustomersService {
         { email: { $regex: `${search.email}`, $options: 'i' } },
       ],
     });
+  }
+
+  async findByPhone(phone: string) {
+    return await this.customerModel.findOne({ phone });
+  }
+
+  async findByPhoneOrCreate(phone: string, userId: string) {
+    let customer = await this.customerModel.findOne({ phone });
+    if (customer) return customer;
+    return await new this.customerModel({ phone, created_by: userId }).save();
   }
 }

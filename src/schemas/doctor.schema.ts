@@ -14,6 +14,7 @@ export class WorkingHours {
 export class Experience {
   desc: string;
   date: string;
+  role: string;
 }
 
 @Schema(transform)
@@ -41,6 +42,16 @@ export class Doctor extends BaseSchema {
     type: String,
   })
   phone: string;
+
+  @Prop({
+    type: String,
+  })
+  desc: string;
+
+  @Prop({
+    type: String,
+  })
+  experiences_desc: string;
 
   @Prop({
     type: String,

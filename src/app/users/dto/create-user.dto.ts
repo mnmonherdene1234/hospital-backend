@@ -1,4 +1,5 @@
 import {
+  IsAlpha,
   IsAlphanumeric,
   IsEnum,
   IsNotEmpty,
@@ -10,6 +11,12 @@ import {
 import { Role } from '../../../schemas/user.schema';
 
 export class CreateUserDto {
+  @IsString()
+  first_name: string;
+
+  @IsString()
+  last_name: string;
+
   @IsString()
   @IsAlphanumeric()
   @MinLength(2)

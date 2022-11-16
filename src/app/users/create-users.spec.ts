@@ -28,6 +28,8 @@ describe('Create Admin and Worker', () => {
   describe('CREATE', () => {
     it('Create Admin', async () => {
       const createUserDto: CreateUserDto = new CreateUserDto();
+      createUserDto.first_name = 'Овог';
+      createUserDto.last_name = 'Нэр';
       createUserDto.username = 'admin';
       createUserDto.password = 'adminpassword';
       createUserDto.role = Role.Admin;
@@ -38,6 +40,8 @@ describe('Create Admin and Worker', () => {
 
     it('Create Worker', async () => {
       const createUserDto: CreateUserDto = new CreateUserDto();
+      createUserDto.first_name = 'Овог';
+      createUserDto.last_name = 'Нэр';
       createUserDto.username = 'worker';
       createUserDto.password = 'workerpassword';
       createUserDto.role = Role.Worker;

@@ -27,6 +27,20 @@ export class User extends BaseSchema {
     type: String,
     unique: true,
   })
+  first_name: string;
+
+  @Prop({
+    required: true,
+    type: String,
+    unique: true,
+  })
+  last_name: string;
+
+  @Prop({
+    required: true,
+    type: String,
+    unique: true,
+  })
   username: string;
 
   @Prop({

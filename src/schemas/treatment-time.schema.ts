@@ -2,15 +2,14 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Customer } from './customer.schema';
 import { Doctor } from './doctor.schema';
-import { Service } from './service.schema';
 import { BaseSchema } from './utils/base.schema';
 import transform from './utils/transform';
 
-export type TreatmentDocument = Treatment & Document;
+export type TreatmentTimeDocument = TreatmentTime & Document;
 
 @Schema(transform)
-export class Treatment extends BaseSchema {
-  static schemaName: string = 'treatments';
+export class TreatmentTime extends BaseSchema {
+  static schemaName: string = 'treatment_times';
 
   @Prop({
     required: true,
@@ -28,16 +27,15 @@ export class Treatment extends BaseSchema {
 
   @Prop({
     required: true,
-    type: mongoose.Schema.Types.ObjectId,
-    ref: Service.schemaName,
+    type: Date,
   })
-  service: Service;
+  start_time: Date;
 
   @Prop({
     required: true,
-    type: Number,
+    type: Date,
   })
-  price: number;
+  end_time: Date;
 }
 
-export const TreatmentSchema = SchemaFactory.createForClass(Treatment);
+export const TreatmentTimeSchema = SchemaFactory.createForClass(TreatmentTime);
