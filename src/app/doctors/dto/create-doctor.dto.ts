@@ -10,9 +10,11 @@ import { Experience, WorkingHours } from 'src/schemas/doctor.schema';
 
 export class CreateDoctorDto {
   @IsString()
+  @IsOptional()
   name: string;
 
   @IsString()
+  @IsOptional()
   role: string;
 
   @IsString()
@@ -33,6 +35,7 @@ export class CreateDoctorDto {
   experiences_desc: string;
 
   @IsUrl()
+  @IsOptional()
   profile_img: string;
 
   @IsNumber()
