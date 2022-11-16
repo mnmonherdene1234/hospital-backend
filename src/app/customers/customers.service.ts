@@ -1,7 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, now } from 'mongoose';
-import { Customer, CustomerDocument } from 'src/schemas/customer.schema';
+import {
+  Customer,
+  CustomerDocument,
+  Gender,
+} from 'src/schemas/customer.schema';
 import { Treatment, TreatmentDocument } from 'src/schemas/treatment.schema';
 import { createCustomerDto } from './dto/create-customer.dto';
 import { CustomerSearchDto } from './dto/customer-search.dto';
@@ -83,5 +87,24 @@ export class CustomersService {
     let customer = await this.customerModel.findOne({ phone });
     if (customer) return customer;
     return await new this.customerModel({ phone, created_by: userId }).save();
+  }
+
+  async genderDonut() {
+    const male = await this.customerModel.count({ gender: Gender.Male });
+    const female = await this.customerModel.count({ gender: Gender.Female });
+    const undefined = await this.customerModel.count({
+      gender: Gender.Undefined,
+    });
+
+    const total = male + female + undefined;
+
+    const malePercent = (male * 100) / total;
+    const femalePercent = (female * 100) / total;
+    const undefinedPercent = (undefined * 100) / total;
+
+    return {
+      labels: ['Эрэгтэй', 'Эмэгтэй', 'Тодорхойгүй'],
+      series: [malePercent, femalePercent, undefinedPercent],
+    };
   }
 }

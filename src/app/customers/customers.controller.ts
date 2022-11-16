@@ -65,4 +65,9 @@ export class CustomersController {
   search(@Query() query: CustomerSearchDto) {
     return this.customersService.search(query);
   }
+
+  @Get('info/gender-donut')
+  genderDonut() {
+    return this.customersService.genderDonut();
+  }
 }
