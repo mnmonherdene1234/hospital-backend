@@ -30,13 +30,13 @@ export class Customer extends BaseSchema {
 
   @Prop({
     type: String,
-    default: 'Тодорхой биш',
+    default: 'Овог',
   })
   first_name: string;
 
   @Prop({
     type: String,
-    default: 'Тодорхой биш',
+    default: 'Нэр',
   })
   last_name: string;
 

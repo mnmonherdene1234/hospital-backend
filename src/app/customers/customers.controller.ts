@@ -70,4 +70,14 @@ export class CustomersController {
   genderDonut() {
     return this.customersService.genderDonut();
   }
+
+  @Get('info/registered-count')
+  registeredCount(): Promise<number> {
+    return this.customersService.registeredCount();
+  }
+
+  @Get('info/advice-count')
+  adviceCount(): Promise<number> {
+    return this.customersService.adviceCount();
+  }
 }

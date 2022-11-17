@@ -56,4 +56,17 @@ export class TreatmentTimesService {
   async remove(id: string) {
     return await this.treatmentTimeModel.findByIdAndDelete(id);
   }
+
+  async todayCount(): Promise<number> {
+    let startTime: Date = new Date();
+    let endTime: Date = new Date();
+
+    startTime.setHours(0, 0, 0, 0);
+    endTime.setHours(23, 59, 59, 999);
+
+    return await this.treatmentTimeModel.count({
+      start_time: { $gte: startTime },
+      end_time: { $lte: endTime },
+    });
+  }
 }

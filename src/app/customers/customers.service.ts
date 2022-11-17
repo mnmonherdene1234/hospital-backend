@@ -64,10 +64,6 @@ export class CustomersService {
       throw new NotFoundException('CUSTOMER_NOTFOUND');
   }
 
-  async count() {
-    return await this.customerModel.count();
-  }
-
   async search(search: CustomerSearchDto) {
     return await this.customerModel.find({
       $or: [
@@ -90,21 +86,35 @@ export class CustomersService {
   }
 
   async genderDonut() {
-    const male = await this.customerModel.count({ gender: Gender.Male });
-    const female = await this.customerModel.count({ gender: Gender.Female });
-    const undefined = await this.customerModel.count({
-      gender: Gender.Undefined,
-    });
+    const customers = await this.customerModel.find().select('gender');
 
-    const total = male + female + undefined;
+    const male = customers.filter((e) => e.gender == Gender.Male).length;
+    const female = customers.filter((e) => e.gender == Gender.Female).length;
+
+    const total = male + female;
 
     const malePercent = (male * 100) / total;
     const femalePercent = (female * 100) / total;
-    const undefinedPercent = (undefined * 100) / total;
 
     return {
-      labels: ['Эрэгтэй', 'Эмэгтэй', 'Тодорхойгүй'],
-      series: [malePercent, femalePercent, undefinedPercent],
+      labels: ['Эрэгтэй', 'Эмэгтэй'],
+      series: [malePercent, femalePercent],
     };
+  }
+
+  async count() {
+    return await this.customerModel.count();
+  }
+
+  async registeredCount(): Promise<number> {
+    return await this.customerModel.count({
+      gender: { $ne: Gender.Undefined },
+    });
+  }
+
+  async adviceCount(): Promise<number> {
+    return await this.customerModel.count({
+      gender: Gender.Undefined,
+    });
   }
 }

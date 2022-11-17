@@ -31,7 +31,13 @@ export class ServicesService {
       .populate(['created_by', 'updated_by', 'services']);
   }
 
-  async exists(id: string) {
+  async exists(id: string | string[]): Promise<void> {
+    if (Array.isArray(id)) {
+      const services = await this.serviceModel.find({ _id: { $in: id } });
+      if (services.length !== id.length)
+        throw new NotFoundException('SERVICE_NOTFOUND');
+    }
+
     if (!(await this.serviceModel.exists({ _id: id })))
       throw new NotFoundException('SERVICE_NOTFOUND');
   }
@@ -48,5 +54,9 @@ export class ServicesService {
       { $set: { customer: null } },
     );
     return await this.serviceModel.findByIdAndDelete(id);
+  }
+
+  async findByIds(ids: string[]) {
+    return await this.serviceModel.find({ _id: { $in: ids } });
   }
 }

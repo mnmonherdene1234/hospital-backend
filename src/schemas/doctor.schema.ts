@@ -25,7 +25,13 @@ export class Doctor extends BaseSchema {
     required: true,
     type: String,
   })
-  name: string;
+  first_name: string;
+
+  @Prop({
+    required: true,
+    type: String,
+  })
+  last_name: string;
 
   @Prop({
     required: true,

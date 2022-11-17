@@ -29,11 +29,13 @@ export class ServicesController {
     return this.servicesService.create(createServiceDto);
   }
 
+  @Roles(Role.Admin, Role.Worker)
   @Get()
   findAll() {
     return this.servicesService.findAll();
   }
 
+  @Roles(Role.Admin, Role.Worker)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.servicesService.findOne(id);

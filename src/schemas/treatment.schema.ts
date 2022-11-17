@@ -28,10 +28,9 @@ export class Treatment extends BaseSchema {
 
   @Prop({
     required: true,
-    type: mongoose.Schema.Types.ObjectId,
-    ref: Service.schemaName,
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: Service.schemaName }],
   })
-  service: Service;
+  services: Service[];
 
   @Prop({
     required: true,

@@ -1,4 +1,4 @@
-import { IsDate, IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsDate, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateTreatmentDto {
   @IsString()
@@ -9,9 +9,11 @@ export class CreateTreatmentDto {
   @IsNotEmpty()
   customer: string;
 
-  @IsString()
-  @IsNotEmpty()
-  service: string;
+  @IsString({ each: true })
+  @IsArray()
+  services: string[];
+
+  price: number;
 
   created_by: string;
   updated_by: string;

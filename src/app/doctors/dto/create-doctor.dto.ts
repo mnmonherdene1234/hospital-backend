@@ -11,7 +11,11 @@ import { Experience, WorkingHours } from 'src/schemas/doctor.schema';
 export class CreateDoctorDto {
   @IsString()
   @IsOptional()
-  name: string;
+  first_name: string;
+
+  @IsString()
+  @IsOptional()
+  last_name: string;
 
   @IsString()
   @IsOptional()

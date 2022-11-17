@@ -53,4 +53,9 @@ export class TreatmentTimesController {
   remove(@Param('id') id: string) {
     return this.treatmentTimesService.remove(id);
   }
+
+  @Get('info/today-count')
+  todayCount(): Promise<number> {
+    return this.treatmentTimesService.todayCount();
+  }
 }

@@ -21,20 +21,27 @@ export class TreatmentsService {
   async create(createTreatmentDto: CreateTreatmentDto) {
     await this.doctorsService.exists(createTreatmentDto.doctor);
     await this.customersService.exists(createTreatmentDto.customer);
-    await this.servicesService.exists(createTreatmentDto.service);
+    await this.servicesService.exists(createTreatmentDto.services);
+    const services = await this.servicesService.findByIds(
+      createTreatmentDto.services,
+    );
+    createTreatmentDto.price = services.reduce(
+      (pre, cur) => (pre += cur.price),
+      0,
+    );
     return await new this.treatmentModel(createTreatmentDto).save();
   }
 
   async findAll() {
     return await this.treatmentModel
       .find()
-      .populate(['doctor', 'customer', 'service', 'created_by', 'updated_by']);
+      .populate(['doctor', 'customer', 'services', 'created_by', 'updated_by']);
   }
 
   async findOne(id: string) {
     return await this.treatmentModel
       .findById(id)
-      .populate(['doctor', 'customer', 'service', 'created_by', 'updated_by']);
+      .populate(['doctor', 'customer', 'services', 'created_by', 'updated_by']);
   }
 
   async exists(id: string) {
@@ -50,5 +57,11 @@ export class TreatmentsService {
 
   async remove(id: string) {
     return await this.treatmentModel.findByIdAndDelete(id);
+  }
+
+  async findByCustomer(id: string) {
+    return await this.treatmentModel
+      .find({ customer: id })
+      .populate(['doctor', 'customer', 'services', 'created_by', 'updated_by']);
   }
 }
