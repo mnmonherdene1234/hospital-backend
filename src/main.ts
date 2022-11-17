@@ -1,4 +1,4 @@
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import helmet from 'helmet';
@@ -15,6 +15,8 @@ async function bootstrap() {
   app.setGlobalPrefix('/v1/api');
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
-  await app.listen(6093);
+  await app.listen(process.env.PORT || 6093);
+  const logger: Logger = new Logger('SERVER');
+  logger.log(`Server listening on ${process.env.PORT || 6093}`);
 }
 bootstrap();
