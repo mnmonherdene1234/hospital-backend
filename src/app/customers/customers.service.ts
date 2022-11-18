@@ -23,6 +23,8 @@ export class CustomersService {
   async create(createCustomerDto: createCustomerDto) {
     const customer = await this.findByPhone(createCustomerDto.phone);
     if (customer) {
+      createCustomerDto.updated_by = createCustomerDto.created_by;
+      delete createCustomerDto.created_by;
       const updated = await this.update(
         customer.id,
         createCustomerDto as UpdateCustomerDto,
@@ -104,6 +106,18 @@ export class CustomersService {
 
   async count() {
     return await this.customerModel.count();
+  }
+
+  async findAllRegistered() {
+    return await this.customerModel.find({
+      gender: { $ne: Gender.Undefined },
+    });
+  }
+
+  async findAllAdvice() {
+    return await this.customerModel.find({
+      gender: Gender.Undefined,
+    });
   }
 
   async registeredCount(): Promise<number> {

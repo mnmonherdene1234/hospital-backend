@@ -69,4 +69,12 @@ export class TreatmentTimesService {
       end_time: { $lte: endTime },
     });
   }
+
+  async findFuture() {
+    return await this.treatmentTimeModel
+      .find({
+        start_time: { $gte: new Date() },
+      })
+      .populate(['doctor', 'customer', 'created_by', 'updated_by']);
+  }
 }

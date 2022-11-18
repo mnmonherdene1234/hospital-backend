@@ -58,4 +58,9 @@ export class TreatmentTimesController {
   todayCount(): Promise<number> {
     return this.treatmentTimesService.todayCount();
   }
+
+  @Get('info/future')
+  findFuture() {
+    return this.treatmentTimesService.findFuture();
+  }
 }

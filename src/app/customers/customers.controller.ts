@@ -56,6 +56,16 @@ export class CustomersController {
     return this.customersService.remove(id);
   }
 
+  @Get('type/registered')
+  findAllRegistered() {
+    return this.customersService.findAllRegistered();
+  }
+
+  @Get('type/advice')
+  findAllAdvice() {
+    return this.customersService.findAllAdvice();
+  }
+
   @Get('info/count')
   count() {
     return this.customersService.count();
