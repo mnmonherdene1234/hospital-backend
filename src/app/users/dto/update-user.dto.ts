@@ -1,7 +1,9 @@
 import {
   IsAlphanumeric,
+  IsEmail,
   IsEnum,
   IsNotEmpty,
+  IsNumberString,
   IsOptional,
   IsString,
   IsUrl,
@@ -22,6 +24,14 @@ export class UpdateUserDto {
   @MinLength(8)
   @IsOptional()
   password: string;
+
+  @IsOptional()
+  @IsNumberString()
+  phone: string;
+
+  @IsOptional()
+  @IsEmail()
+  email: string;
 
   @IsEnum(Role)
   @IsNotEmpty()

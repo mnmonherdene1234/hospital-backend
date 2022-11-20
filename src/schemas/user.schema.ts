@@ -25,16 +25,26 @@ export class User extends BaseSchema {
   @Prop({
     required: true,
     type: String,
-    unique: true,
   })
   first_name: string;
 
   @Prop({
     required: true,
     type: String,
-    unique: true,
   })
   last_name: string;
+
+  @Prop({
+    required: true,
+    type: String,
+  })
+  email: string;
+
+  @Prop({
+    required: true,
+    type: String,
+  })
+  phone: string;
 
   @Prop({
     required: true,
@@ -50,7 +60,6 @@ export class User extends BaseSchema {
   password: string;
 
   @Prop({
-    required: true,
     enum: Role,
     default: Role.Worker,
   })

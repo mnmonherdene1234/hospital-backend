@@ -60,4 +60,10 @@ export class UsersService {
   async remove(id: string) {
     return await this.userModel.findByIdAndDelete(id);
   }
+
+  async findByPhone(phone: string) {
+    return await this.userModel.findOne({
+      phone,
+    });
+  }
 }

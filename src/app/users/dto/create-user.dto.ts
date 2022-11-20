@@ -1,8 +1,10 @@
 import {
   IsAlpha,
   IsAlphanumeric,
+  IsEmail,
   IsEnum,
   IsNotEmpty,
+  IsNumberString,
   IsOptional,
   IsString,
   IsUrl,
@@ -16,6 +18,12 @@ export class CreateUserDto {
 
   @IsString()
   last_name: string;
+
+  @IsNumberString()
+  phone: string;
+
+  @IsEmail()
+  email: string;
 
   @IsString()
   @IsAlphanumeric()

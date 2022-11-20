@@ -33,4 +33,9 @@ export class AuthController {
   updateProfile(@Body() updateUserDto: UpdateUserDto, @Request() req: any) {
     return this.authService.updateProfile(req.user.id, updateUserDto);
   }
+
+  @Post('reset-password')
+  resetPassword(@Body('phone') phone: string) {
+    return this.authService.resetPassword(phone);
+  }
 }
