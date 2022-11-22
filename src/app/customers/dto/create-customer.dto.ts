@@ -7,7 +7,12 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
-import { BloodType, FamilyStatus, Gender } from 'src/schemas/customer.schema';
+import {
+  BloodType,
+  FamilyStatus,
+  Gender,
+  Rate,
+} from 'src/schemas/customer.schema';
 
 export class createCustomerDto {
   @IsString()
@@ -46,6 +51,10 @@ export class createCustomerDto {
   @IsOptional()
   @IsEnum(FamilyStatus)
   family_status: FamilyStatus;
+
+  @IsOptional()
+  @IsEnum(Rate)
+  rate: Rate;
 
   @IsString()
   @IsOptional()

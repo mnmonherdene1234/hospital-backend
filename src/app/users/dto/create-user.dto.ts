@@ -1,5 +1,4 @@
 import {
-  IsAlpha,
   IsAlphanumeric,
   IsEmail,
   IsEnum,

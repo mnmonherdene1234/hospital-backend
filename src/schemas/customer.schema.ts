@@ -24,6 +24,12 @@ export enum BloodType {
   Undefined = 'UNDIFINED',
 }
 
+export enum Rate {
+  Good = 'GOOD',
+  Middle = 'MIDDLE',
+  Bad = 'BAD',
+}
+
 @Schema(transform)
 export class Customer extends BaseSchema {
   static schemaName: string = 'customers';
@@ -79,6 +85,12 @@ export class Customer extends BaseSchema {
     default: FamilyStatus.Undefined,
   })
   family_status: FamilyStatus;
+
+  @Prop({
+    enum: Rate,
+    default: Rate.Good,
+  })
+  rate: Rate;
 
   @Prop({
     type: String,
