@@ -78,7 +78,7 @@ export class Customer extends BaseSchema {
     enum: FamilyStatus,
     default: FamilyStatus.Undefined,
   })
-  family_status: Gender;
+  family_status: FamilyStatus;
 
   @Prop({
     type: String,

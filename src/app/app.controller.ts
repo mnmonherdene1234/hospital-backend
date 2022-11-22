@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
@@ -13,5 +13,10 @@ export class AppController {
   @Post('upload')
   signature() {
     return this.appService.signature();
+  }
+
+  @Delete('delete')
+  remove(@Body('name') name: string) {
+    return this.appService.deleteMedia(name);
   }
 }

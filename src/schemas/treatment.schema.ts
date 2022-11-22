@@ -34,6 +34,18 @@ export class Treatment extends BaseSchema {
 
   @Prop({
     required: true,
+    type: Date,
+  })
+  start_time: Date;
+
+  @Prop({
+    required: true,
+    type: Date,
+  })
+  end_time: Date;
+
+  @Prop({
+    required: true,
     type: Number,
   })
   price: number;
