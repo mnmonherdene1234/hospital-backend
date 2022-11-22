@@ -1,5 +1,6 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
+import { Resource } from './resource.schema';
 import { BaseSchema } from './utils/base.schema';
 import transform from './utils/transform';
 
@@ -9,6 +10,11 @@ export enum ServiceType {
   Package = 'PACKAGE',
   Basic = 'BASIC',
   Additional = 'ADDITIONAL',
+}
+
+export class ServiceResource {
+  resource: Resource;
+  quantity: number;
 }
 
 @Schema(transform)
@@ -48,6 +54,20 @@ export class Service extends BaseSchema {
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: Service.schemaName }],
   })
   services: Service[];
+
+  @Prop({
+    default: [],
+    type: [
+      raw({
+        resource: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: Resource.schemaName,
+        },
+        quantity: { type: Number, require: true },
+      }),
+    ],
+  })
+  resources: ServiceResource[];
 }
 
 export const ServiceSchema = SchemaFactory.createForClass(Service);

@@ -8,7 +8,7 @@ import {
   IsString,
   IsUrl,
 } from 'class-validator';
-import { ServiceType } from 'src/schemas/service.schema';
+import { ServiceResource, ServiceType } from 'src/schemas/service.schema';
 
 export class CreateServiceDto {
   @IsString()
@@ -35,6 +35,10 @@ export class CreateServiceDto {
   @IsArray()
   @IsString({ each: true })
   services: string;
+
+  @IsOptional()
+  @IsArray()
+  resources: ServiceResource[];
 
   created_by: string;
   updated_by: string;

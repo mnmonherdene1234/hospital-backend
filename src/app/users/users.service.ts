@@ -20,7 +20,9 @@ export class UsersService {
   }
 
   async findAll() {
-    return await this.userModel.find().populate(['created_by', 'updated_by']);
+    return await this.userModel
+      .find({ role: Role.Worker })
+      .populate(['created_by', 'updated_by']);
   }
 
   async findOne(id: string) {

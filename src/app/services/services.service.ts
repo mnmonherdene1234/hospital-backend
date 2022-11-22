@@ -22,13 +22,13 @@ export class ServicesService {
   async findAll() {
     return await this.serviceModel
       .find()
-      .populate(['created_by', 'updated_by', 'services']);
+      .populate(['created_by', 'updated_by', 'services', 'resources.resource']);
   }
 
   async findOne(id: string) {
     return await this.serviceModel
       .findById(id)
-      .populate(['created_by', 'updated_by', 'services']);
+      .populate(['created_by', 'updated_by', 'services', 'resources.resource']);
   }
 
   async exists(id: string | string[]): Promise<void> {
@@ -57,6 +57,8 @@ export class ServicesService {
   }
 
   async findByIds(ids: string[]) {
-    return await this.serviceModel.find({ _id: { $in: ids } });
+    return await this.serviceModel
+      .find({ _id: { $in: ids } })
+      .populate(['created_by', 'updated_by', 'services', 'resources.resource']);
   }
 }
