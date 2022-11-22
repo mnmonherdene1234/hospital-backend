@@ -1,4 +1,4 @@
-import { IsNumber, IsString, IsUrl } from 'class-validator';
+import { IsNumber, IsPositive, IsString, IsUrl, Min } from 'class-validator';
 
 export class CreateResourceDto {
   @IsString()
@@ -8,6 +8,7 @@ export class CreateResourceDto {
   image: string;
 
   @IsNumber()
+  @Min(0)
   quantity: number;
 
   created_by: string;

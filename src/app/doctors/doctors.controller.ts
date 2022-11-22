@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -15,6 +16,7 @@ import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { DoctorsService } from './doctors.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
+import { FindAvailableDoctorsDto } from './dto/find-available.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
 @Roles(Role.Admin, Role.Worker)
@@ -57,5 +59,10 @@ export class DoctorsController {
   @Get('info/count')
   count() {
     return this.doctorsService.count();
+  }
+
+  @Get('type/available')
+  available(@Query() findAvailableDoctorsDto: FindAvailableDoctorsDto) {
+    return this.doctorsService.available(findAvailableDoctorsDto);
   }
 }

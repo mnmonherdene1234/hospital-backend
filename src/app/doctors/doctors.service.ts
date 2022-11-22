@@ -4,6 +4,7 @@ import { Model, now } from 'mongoose';
 import { Doctor, DoctorDocument } from 'src/schemas/doctor.schema';
 import { Treatment, TreatmentDocument } from 'src/schemas/treatment.schema';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
+import { FindAvailableDoctorsDto } from './dto/find-available.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
 @Injectable()
@@ -50,5 +51,36 @@ export class DoctorsService {
 
   async count() {
     return await this.doctorModel.count();
+  }
+
+  async available(findAvailableDoctorsDto: FindAvailableDoctorsDto) {
+    const startTime: Date = new Date(findAvailableDoctorsDto.start_time);
+    const endTime: Date = new Date(findAvailableDoctorsDto.end_time);
+    const day = startTime.getDay();
+    const doctors = await this.findAll();
+    const availableDoctors = [];
+
+    doctors.forEach(async (doctor) => {
+      const doctorDay = doctor.working_hours[day - 1];
+      if (!doctorDay?.start_time || !doctorDay?.end_time) return;
+
+      const doctorStartTime: Date = new Date(startTime);
+      const [startHours, startMinutes, startSeconds] =
+        doctorDay.start_time.split(':');
+      doctorStartTime.setHours(+startHours);
+      doctorStartTime.setMinutes(+startMinutes);
+      doctorStartTime.setSeconds(+startSeconds);
+
+      const doctorEndTime: Date = new Date(endTime);
+      const [endHours, endMinutes, endSeconds] = doctorDay.end_time.split(':');
+      doctorEndTime.setHours(+endHours);
+      doctorEndTime.setMinutes(+endMinutes);
+      doctorEndTime.setSeconds(+endSeconds);
+
+      if (startTime >= doctorStartTime && endTime <= doctorEndTime) {
+        availableDoctors.push(doctor);
+      }
+    });
+    return availableDoctors;
   }
 }

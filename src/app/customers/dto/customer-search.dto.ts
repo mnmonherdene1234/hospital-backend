@@ -9,7 +9,7 @@ export class CustomerSearchDto {
   @IsOptional()
   phone: string;
 
-  @IsEmail()
+  @IsString()
   @IsOptional()
   email: string;
 }

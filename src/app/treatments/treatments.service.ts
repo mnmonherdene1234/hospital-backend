@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, now } from 'mongoose';
 import { Treatment, TreatmentDocument } from 'src/schemas/treatment.schema';
@@ -63,16 +67,11 @@ export class TreatmentsService {
   }
 
   async update(id: string, updateTreatmentDto: UpdateTreatmentDto) {
-    return await this.treatmentModel.findByIdAndUpdate(id, {
-      $set: { ...updateTreatmentDto, updated_at: now() },
-    });
-  }
-
-  async remove(id: string) {
     await this.exists(id);
     const treatment = await this.treatmentModel.findById(id);
-    const now: Date = new Date();
-    if (treatment.end_time > now) {
+
+    if (updateTreatmentDto.services) {
+      // increase previous resources
       const services = await this.servicesService.findByIds(
         treatment.services as unknown as string[],
       );
@@ -85,7 +84,45 @@ export class TreatmentsService {
           );
         });
       });
+
+      // decrease new resources
+      updateTreatmentDto.services.forEach(async (service) => {
+        const res = await this.servicesService.findOne(service);
+        res.resources.forEach(async (resource) => {
+          await this.resourcesService.decrease(
+            resource.resource['id'],
+            resource.quantity,
+          );
+        });
+      });
     }
+
+    return await this.treatmentModel.findByIdAndUpdate(id, {
+      $set: { ...updateTreatmentDto, updated_at: now() },
+    });
+  }
+
+  async remove(id: string) {
+    await this.exists(id);
+    const treatment = await this.treatmentModel.findById(id);
+    const now: Date = new Date();
+
+    if (treatment.end_time < now)
+      throw new BadRequestException('COMPLETED_TREATMENT');
+
+    const services = await this.servicesService.findByIds(
+      treatment.services as unknown as string[],
+    );
+
+    services.forEach(async (service) => {
+      service.resources.forEach(async (resource) => {
+        await this.resourcesService.increase(
+          resource.resource['id'],
+          resource.quantity,
+        );
+      });
+    });
+
     return await this.treatmentModel.findByIdAndDelete(id);
   }
 
