@@ -75,6 +75,7 @@ export class TreatmentTimesService {
       .find({
         start_time: { $gte: new Date() },
       })
-      .populate(['doctor', 'customer', 'created_by', 'updated_by']);
+      .populate(['doctor', 'customer', 'created_by', 'updated_by'])
+      .sort('start_time');
   }
 }

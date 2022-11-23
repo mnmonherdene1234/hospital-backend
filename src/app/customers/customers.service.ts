@@ -38,7 +38,8 @@ export class CustomersService {
   async findAll() {
     return await this.customerModel
       .find()
-      .populate(['created_by', 'updated_by']);
+      .populate(['created_by', 'updated_by'])
+      .sort('-created_at');
   }
 
   async findOne(id: string) {

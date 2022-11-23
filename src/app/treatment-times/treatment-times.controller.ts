@@ -59,7 +59,7 @@ export class TreatmentTimesController {
     return this.treatmentTimesService.todayCount();
   }
 
-  @Get('info/future')
+  @Get('type/future')
   findFuture() {
     return this.treatmentTimesService.findFuture();
   }
