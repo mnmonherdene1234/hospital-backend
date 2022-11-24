@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
@@ -20,6 +20,11 @@ export class TreatmentTimesService {
   ) {}
 
   async create(dto: CreateTreatmentTimeDto) {
+    const now: Date = new Date();
+    const startTime: Date = new Date(dto.start_time);
+
+    if (startTime < now) throw new BadRequestException('PAST_TENSE');
+
     this.doctorsService.exists(dto.doctor);
     const customer = await this.customersService.findByPhoneOrCreate(
       dto.customer_phone,
@@ -33,6 +38,9 @@ export class TreatmentTimesService {
     return await this.treatmentTimeModel
       .find()
       .populate(['doctor', 'customer', 'created_by', 'updated_by']);
+    // buruu bichijee
+    // paginiation
+    //
   }
 
   async findOne(id: string) {
@@ -67,6 +75,13 @@ export class TreatmentTimesService {
     return await this.treatmentTimeModel.count({
       start_time: { $gte: startTime },
       end_time: { $lte: endTime },
+    });
+  }
+
+  async findByDate(startDate: Date, endDate: Date) {
+    return await this.treatmentTimeModel.find({
+      start_time: { $gte: startDate },
+      end_time: { $lte: endDate },
     });
   }
 

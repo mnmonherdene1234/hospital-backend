@@ -17,10 +17,10 @@ export enum FamilyStatus {
 }
 
 export enum BloodType {
-  О = '1-О',
-  A = '2-А',
-  B = '3-В',
-  AB = '4-АВ',
+  O = '1-O',
+  A = '2-A',
+  B = '3-B',
+  AB = '4-AB',
   Undefined = 'UNDIFINED',
 }
 

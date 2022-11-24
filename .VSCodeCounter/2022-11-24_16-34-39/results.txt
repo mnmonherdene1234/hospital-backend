@@ -1,0 +1,106 @@
+Date : 2022-11-24 16:34:39
+Directory : /home/mn/Documents/Hospital/hospital-backend/src
+Total : 63 files,  2282 codes, 4 comments, 436 blanks, all 2722 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| TypeScript |         63 |      2,282 |          4 |        436 |      2,722 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                  | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                     |         63 |      2,282 |          4 |        436 |      2,722 |
+| app                                                                                                   |         53 |      1,832 |          3 |        339 |      2,174 |
+| app/auth                                                                                              |          9 |        176 |          0 |         31 |        207 |
+| app/customers                                                                                         |          6 |        290 |          0 |         59 |        349 |
+| app/customers/dto                                                                                     |          3 |         76 |          0 |         21 |         97 |
+| app/doctors                                                                                           |          7 |        251 |          1 |         50 |        302 |
+| app/doctors/dto                                                                                       |          4 |         66 |          0 |         18 |         84 |
+| app/resources                                                                                         |          5 |        137 |          0 |         28 |        165 |
+| app/resources/dto                                                                                     |          2 |         16 |          0 |          7 |         23 |
+| app/services                                                                                          |          5 |        188 |          0 |         33 |        221 |
+| app/services/dto                                                                                      |          2 |         61 |          0 |         14 |         75 |
+| app/treatment-times                                                                                   |          5 |        178 |          0 |         31 |        209 |
+| app/treatment-times/dto                                                                               |          2 |         18 |          0 |          8 |         26 |
+| app/treatments                                                                                        |          5 |        231 |          2 |         41 |        274 |
+| app/treatments/dto                                                                                    |          2 |         36 |          0 |         12 |         48 |
+| app/users                                                                                             |          6 |        252 |          0 |         48 |        300 |
+| app/users/dto                                                                                         |          2 |         76 |          0 |         20 |         96 |
+| app/utils                                                                                             |          2 |         36 |          0 |          6 |         42 |
+| schemas                                                                                               |          9 |        429 |          1 |         95 |        525 |
+| schemas/utils                                                                                         |          2 |         40 |          0 |          6 |         46 |
++-------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                              | language   | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| /home/mn/Documents/Hospital/hospital-backend/src/app/app.controller.ts                                | TypeScript |         18 |          0 |          5 |         23 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/app.module.ts                                    | TypeScript |         51 |          0 |          2 |         53 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/app.service.ts                                   | TypeScript |         24 |          0 |          5 |         29 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/auth/auth.controller.ts                          | TypeScript |         36 |          0 |          6 |         42 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/auth/auth.module.ts                              | TypeScript |         22 |          0 |          2 |         24 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/auth/auth.service.ts                             | TypeScript |         45 |          0 |          8 |         53 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/auth/jwt-auth.guard.ts                           | TypeScript |          4 |          0 |          2 |          6 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/auth/jwt.strategy.ts                             | TypeScript |         16 |          0 |          3 |         19 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/auth/local-auth.guard.ts                         | TypeScript |          4 |          0 |          1 |          5 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/auth/local.strategy.ts                           | TypeScript |         15 |          0 |          3 |         18 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/auth/roles.decorator.ts                          | TypeScript |          4 |          0 |          2 |          6 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/auth/roles.guard.ts                              | TypeScript |         30 |          0 |          4 |         34 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/customers/customers.controller.ts                | TypeScript |         80 |          0 |         14 |         94 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/customers/customers.module.ts                    | TypeScript |         20 |          0 |          2 |         22 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/customers/customers.service.ts                   | TypeScript |        114 |          0 |         22 |        136 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/customers/dto/create-customer.dto.ts             | TypeScript |         55 |          0 |         14 |         69 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/customers/dto/customer-search.dto.ts             | TypeScript |         12 |          0 |          4 |         16 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/customers/dto/update-customer.dto.ts             | TypeScript |          9 |          0 |          3 |         12 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/doctors/doctors.controller.ts                    | TypeScript |         60 |          0 |          9 |         69 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/doctors/doctors.module.ts                        | TypeScript |         22 |          0 |          2 |         24 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/doctors/doctors.service.ts                       | TypeScript |        103 |          1 |         21 |        125 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/doctors/dto/create-doctor.dto.ts                 | TypeScript |         43 |          0 |         12 |         55 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/doctors/dto/doctor.dto.ts                        | TypeScript |         12 |          0 |          1 |         13 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/doctors/dto/find-available.dto.ts                | TypeScript |          7 |          0 |          3 |         10 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/doctors/dto/update-doctor.dto.ts                 | TypeScript |          4 |          0 |          2 |          6 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/resources/dto/create-resource.dto.ts             | TypeScript |         12 |          0 |          5 |         17 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/resources/dto/update-resource.dto.ts             | TypeScript |          4 |          0 |          2 |          6 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/resources/resources.controller.ts                | TypeScript |         50 |          0 |          7 |         57 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/resources/resources.module.ts                    | TypeScript |         18 |          0 |          2 |         20 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/resources/resources.service.ts                   | TypeScript |         53 |          0 |         12 |         65 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/services/dto/create-service.dto.ts               | TypeScript |         37 |          0 |          9 |         46 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/services/dto/update-service.dto.ts               | TypeScript |         24 |          0 |          5 |         29 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/services/services.controller.ts                  | TypeScript |         52 |          0 |          7 |         59 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/services/services.module.ts                      | TypeScript |         20 |          0 |          2 |         22 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/services/services.service.ts                     | TypeScript |         55 |          0 |         10 |         65 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/treatment-times/dto/create-treatment-time.dto.ts | TypeScript |         14 |          0 |          6 |         20 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/treatment-times/dto/update-treatment-time.dto.ts | TypeScript |          4 |          0 |          2 |          6 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/treatment-times/treatment-times.controller.ts    | TypeScript |         58 |          0 |          9 |         67 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/treatment-times/treatment-times.module.ts        | TypeScript |         25 |          0 |          2 |         27 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/treatment-times/treatment-times.service.ts       | TypeScript |         77 |          0 |         12 |         89 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/treatments/dto/create-treatment.dto.ts           | TypeScript |         25 |          0 |          8 |         33 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/treatments/dto/update-treatment.dto.ts           | TypeScript |         11 |          0 |          4 |         15 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/treatments/treatments.controller.ts              | TypeScript |         55 |          0 |          8 |         63 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/treatments/treatments.module.ts                  | TypeScript |         26 |          0 |          2 |         28 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/treatments/treatments.service.ts                 | TypeScript |        114 |          2 |         19 |        135 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/users/create-users.spec.ts                       | TypeScript |         52 |          0 |          6 |         58 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/users/dto/create-user.dto.ts                     | TypeScript |         37 |          0 |         10 |         47 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/users/dto/update-user.dto.ts                     | TypeScript |         39 |          0 |         10 |         49 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/users/users.controller.ts                        | TypeScript |         51 |          0 |          7 |         58 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/users/users.module.ts                            | TypeScript |         14 |          0 |          2 |         16 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/users/users.service.ts                           | TypeScript |         59 |          0 |         13 |         72 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/utils/http-exception.filter.ts                   | TypeScript |         26 |          0 |          3 |         29 |
+| /home/mn/Documents/Hospital/hospital-backend/src/app/utils/logger.middleware.ts                       | TypeScript |         10 |          0 |          3 |         13 |
+| /home/mn/Documents/Hospital/hospital-backend/src/main.ts                                              | TypeScript |         21 |          0 |          2 |         23 |
+| /home/mn/Documents/Hospital/hospital-backend/src/schemas/customer.schema.ts                           | TypeScript |         86 |          0 |         20 |        106 |
+| /home/mn/Documents/Hospital/hospital-backend/src/schemas/doctor.schema.ts                             | TypeScript |         74 |          0 |         17 |         91 |
+| /home/mn/Documents/Hospital/hospital-backend/src/schemas/resource.schema.ts                           | TypeScript |         25 |          1 |          8 |         34 |
+| /home/mn/Documents/Hospital/hospital-backend/src/schemas/service.schema.ts                            | TypeScript |         61 |          0 |         13 |         74 |
+| /home/mn/Documents/Hospital/hospital-backend/src/schemas/treatment-time.schema.ts                     | TypeScript |         34 |          0 |          8 |         42 |
+| /home/mn/Documents/Hospital/hospital-backend/src/schemas/treatment.schema.ts                          | TypeScript |         45 |          0 |         10 |         55 |
+| /home/mn/Documents/Hospital/hospital-backend/src/schemas/user.schema.ts                               | TypeScript |         64 |          0 |         13 |         77 |
+| /home/mn/Documents/Hospital/hospital-backend/src/schemas/utils/base.schema.ts                         | TypeScript |         29 |          0 |          5 |         34 |
+| /home/mn/Documents/Hospital/hospital-backend/src/schemas/utils/transform.ts                           | TypeScript |         11 |          0 |          1 |         12 |
+| Total                                                                                                 |            |      2,282 |          4 |        436 |      2,722 |
++-------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

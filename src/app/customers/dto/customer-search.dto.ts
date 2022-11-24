@@ -5,7 +5,7 @@ export class CustomerSearchDto {
   @IsOptional()
   name: string;
 
-  @IsNumberString()
+  @IsString()
   @IsOptional()
   phone: string;
 

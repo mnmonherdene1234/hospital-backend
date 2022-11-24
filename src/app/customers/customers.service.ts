@@ -7,7 +7,7 @@ import {
   Gender,
 } from 'src/schemas/customer.schema';
 import { Treatment, TreatmentDocument } from 'src/schemas/treatment.schema';
-import { createCustomerDto } from './dto/create-customer.dto';
+import { CreateCustomerDto } from './dto/create-customer.dto';
 import { CustomerSearchDto } from './dto/customer-search.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 
@@ -20,7 +20,7 @@ export class CustomersService {
     private readonly treatmentModel: Model<TreatmentDocument>,
   ) {}
 
-  async create(createCustomerDto: createCustomerDto) {
+  async create(createCustomerDto: CreateCustomerDto) {
     const customer = await this.findByPhone(createCustomerDto.phone);
     if (customer) {
       createCustomerDto.updated_by = createCustomerDto.created_by;

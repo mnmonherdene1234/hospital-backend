@@ -15,7 +15,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { CustomersService } from './customers.service';
-import { createCustomerDto } from './dto/create-customer.dto';
+import { CreateCustomerDto } from './dto/create-customer.dto';
 import { CustomerSearchDto } from './dto/customer-search.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 
@@ -26,7 +26,7 @@ export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
 
   @Post()
-  create(@Body() createCustomerDto: createCustomerDto, @Request() req: any) {
+  create(@Body() createCustomerDto: CreateCustomerDto, @Request() req: any) {
     createCustomerDto.created_by = req.user.id;
     return this.customersService.create(createCustomerDto);
   }

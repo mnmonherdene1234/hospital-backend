@@ -1,7 +1,7 @@
 import { IsNumberString, IsOptional, MinLength } from 'class-validator';
-import { createCustomerDto } from './create-customer.dto';
+import { CreateCustomerDto } from './create-customer.dto';
 
-export class UpdateCustomerDto extends createCustomerDto {
+export class UpdateCustomerDto extends CreateCustomerDto {
   id: string;
 
   @IsOptional()

@@ -15,8 +15,8 @@ async function bootstrap() {
   app.setGlobalPrefix('/v1/api');
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
-  await app.listen(process.env.PORT || 6093);
+  await app.listen(process.env.PORT || 64536);
   const logger: Logger = new Logger('SERVER');
-  logger.log(`Server listening on ${process.env.PORT || 6093}`);
+  logger.log(`Server listening on ${process.env.PORT || 64536}`);
 }
 bootstrap();

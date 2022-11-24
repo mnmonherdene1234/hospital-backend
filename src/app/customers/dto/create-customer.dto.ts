@@ -1,7 +1,6 @@
 import {
   IsEmail,
   IsEnum,
-  IsNumber,
   IsNumberString,
   IsOptional,
   IsString,
@@ -14,7 +13,7 @@ import {
   Rate,
 } from 'src/schemas/customer.schema';
 
-export class createCustomerDto {
+export class CreateCustomerDto {
   @IsString()
   @MinLength(1)
   @IsOptional()
@@ -45,7 +44,7 @@ export class createCustomerDto {
   gender: Gender;
 
   @IsOptional()
-  @IsEnum(BloodType)
+  @IsString()
   blood_type: BloodType;
 
   @IsOptional()

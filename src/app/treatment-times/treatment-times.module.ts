@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Global, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
   TreatmentTime,
@@ -16,11 +16,11 @@ import { TreatmentTimesService } from './treatment-times.service';
       { name: TreatmentTime.schemaName, schema: TreatmentTimeSchema },
     ]),
     UsersModule,
-    DoctorsModule,
-    CustomersModule,
+    forwardRef(() => CustomersModule),
+    forwardRef(() => DoctorsModule),
   ],
   controllers: [TreatmentTimesController],
   providers: [TreatmentTimesService],
-  exports: [TreatmentTimesService, MongooseModule],
+  exports: [MongooseModule, TreatmentTimesService],
 })
 export class TreatmentTimesModule {}
