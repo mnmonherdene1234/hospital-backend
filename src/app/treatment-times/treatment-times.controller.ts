@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -14,6 +15,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { CreateTreatmentTimeDto } from './dto/create-treatment-time.dto';
+import { SearchTreatmentTimeDto } from './dto/search-treatment-time.dto';
 import { UpdateTreatmentTimeDto } from './dto/update-treatment-time.dto';
 import { TreatmentTimesService } from './treatment-times.service';
 
@@ -62,5 +64,10 @@ export class TreatmentTimesController {
   @Get('type/future')
   findFuture() {
     return this.treatmentTimesService.findFuture();
+  }
+
+  @Get('search/all')
+  search(@Query() searchDto: SearchTreatmentTimeDto) {
+    return this.treatmentTimesService.search(searchDto);
   }
 }

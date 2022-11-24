@@ -8,6 +8,7 @@ import {
 import { CustomersService } from '../customers/customers.service';
 import { DoctorsService } from '../doctors/doctors.service';
 import { CreateTreatmentTimeDto } from './dto/create-treatment-time.dto';
+import { SearchTreatmentTimeDto } from './dto/search-treatment-time.dto';
 import { UpdateTreatmentTimeDto } from './dto/update-treatment-time.dto';
 
 @Injectable()
@@ -92,5 +93,38 @@ export class TreatmentTimesService {
       })
       .populate(['doctor', 'customer', 'created_by', 'updated_by'])
       .sort('start_time');
+  }
+
+  async search(dto: SearchTreatmentTimeDto) {
+    const { page, page_size } = dto;
+    if (dto.start_date && dto.end_date) {
+      var startDate = new Date(dto.start_date);
+      startDate.setHours(0);
+      startDate.setHours(0);
+      startDate.setSeconds(0);
+
+      var endDate = new Date(dto.end_date);
+      endDate.setHours(23);
+      endDate.setMinutes(59);
+      endDate.setSeconds(59);
+    }
+
+    const data = await this.treatmentTimeModel
+      .find({
+        start_time: { $gte: startDate },
+        end_time: { $lte: endDate },
+        'customer.phone': { $regex: `${dto.customer_phone}`, $options: 'i' },
+        doctor: dto.doctor,
+      })
+      .skip((+page - 1) * +page_size)
+      .limit(+page_size);
+
+    return {
+      data,
+      meta: {
+        page,
+        page_size,
+      },
+    };
   }
 }
