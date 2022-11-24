@@ -26,7 +26,6 @@ export enum BloodType {
 
 export enum Rate {
   Good = 'GOOD',
-  Middle = 'MIDDLE',
   Bad = 'BAD',
 }
 
