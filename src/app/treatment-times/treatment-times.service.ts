@@ -6,6 +6,7 @@ import {
   TreatmentTimeDocument,
 } from 'src/schemas/treatment-time.schema';
 import { CustomersService } from '../customers/customers.service';
+import { CustomerSearchDto } from '../customers/dto/customer-search.dto';
 import { DoctorsService } from '../doctors/doctors.service';
 import { CreateTreatmentTimeDto } from './dto/create-treatment-time.dto';
 import { SearchTreatmentTimeDto } from './dto/search-treatment-time.dto';
@@ -39,9 +40,6 @@ export class TreatmentTimesService {
     return await this.treatmentTimeModel
       .find()
       .populate(['doctor', 'customer', 'created_by', 'updated_by']);
-    // buruu bichijee
-    // paginiation
-    //
   }
 
   async findOne(id: string) {
@@ -51,11 +49,17 @@ export class TreatmentTimesService {
   }
 
   async update(id: string, dto: UpdateTreatmentTimeDto) {
+    const now: Date = new Date();
+    const startTime: Date = new Date(dto.start_time);
+
+    if (startTime < now) throw new BadRequestException('PAST_TENSE');
+
     this.doctorsService.exists(dto.doctor);
     const customer = await this.customersService.findByPhoneOrCreate(
       dto.customer_phone,
       dto.created_by,
     );
+
     dto.customer = customer.id;
     return await this.treatmentTimeModel.findByIdAndUpdate(id, {
       $set: { ...dto },
@@ -64,6 +68,10 @@ export class TreatmentTimesService {
 
   async remove(id: string) {
     return await this.treatmentTimeModel.findByIdAndDelete(id);
+  }
+
+  async exists(id: string) {
+    return await this.treatmentTimeModel.exists({ _id: id });
   }
 
   async todayCount(): Promise<number> {
@@ -77,6 +85,21 @@ export class TreatmentTimesService {
       start_time: { $gte: startTime },
       end_time: { $lte: endTime },
     });
+  }
+
+  async todayTimes() {
+    let startTime: Date = new Date();
+    let endTime: Date = new Date();
+
+    startTime.setHours(0, 0, 0, 0);
+    endTime.setHours(23, 59, 59, 999);
+
+    return await this.treatmentTimeModel
+      .find({
+        start_time: { $gte: startTime },
+        end_time: { $lte: endTime },
+      })
+      .populate(['doctor', 'customer', 'created_by', 'updated_by']);
   }
 
   async findByDate(startDate: Date, endDate: Date) {
@@ -97,6 +120,9 @@ export class TreatmentTimesService {
 
   async search(dto: SearchTreatmentTimeDto) {
     const { page, page_size } = dto;
+
+    let filter: any = {};
+
     if (dto.start_date && dto.end_date) {
       var startDate = new Date(dto.start_date);
       startDate.setHours(0);
@@ -107,24 +133,53 @@ export class TreatmentTimesService {
       endDate.setHours(23);
       endDate.setMinutes(59);
       endDate.setSeconds(59);
+      filter.start_date = { $gte: startDate };
+      filter.endDate = { $lte: endDate };
+    }
+
+    if (dto.customer_phone) {
+      let search: CustomerSearchDto = new CustomerSearchDto();
+      search.phone = dto.customer_phone;
+      const customers = await this.customersService.search(search);
+      let customersIds: string[] = [];
+      customers.forEach((customer) => {
+        customersIds.push(customer.id);
+      });
+
+      filter.customer = { $in: customersIds };
+    }
+
+    if (dto.doctor) {
+      filter.doctor = dto.doctor;
     }
 
     const data = await this.treatmentTimeModel
-      .find({
-        start_time: { $gte: startDate },
-        end_time: { $lte: endDate },
-        'customer.phone': { $regex: `${dto.customer_phone}`, $options: 'i' },
-        doctor: dto.doctor,
-      })
+      .find(filter)
       .skip((+page - 1) * +page_size)
-      .limit(+page_size);
+      .limit(+page_size)
+      .populate(['doctor', 'customer', 'created_by', 'updated_by'])
+      .sort('start_time');
+
+    const total = await this.treatmentTimeModel.count(filter);
 
     return {
       data,
       meta: {
         page,
         page_size,
+        filter,
+        total,
       },
     };
+  }
+
+  async findNotificationTimes() {
+    const now: Date = new Date();
+    const hourLater = new Date(now.setHours(now.getHours() + 1));
+
+    return await this.treatmentTimeModel.find({
+      start_time: { $gte: now, $lte: hourLater },
+      seen: false,
+    });
   }
 }

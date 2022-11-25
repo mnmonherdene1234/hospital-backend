@@ -18,6 +18,7 @@ import { TreatmentsModule } from './treatments/treatments.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { TreatmentTimesModule } from './treatment-times/treatment-times.module';
 import { ResourcesModule } from './resources/resources.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ResourcesModule } from './resources/resources.module';
       ttl: 3,
       max: 30,
     }),
+    ScheduleModule.forRoot(),
     AuthModule,
     UsersModule,
     CustomersModule,

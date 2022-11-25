@@ -61,13 +61,18 @@ export class TreatmentTimesController {
     return this.treatmentTimesService.todayCount();
   }
 
+  @Get('info/today-times')
+  todayTimes() {
+    return this.treatmentTimesService.todayTimes();
+  }
+
   @Get('type/future')
   findFuture() {
     return this.treatmentTimesService.findFuture();
   }
 
-  @Get('search/all')
-  search(@Query() searchDto: SearchTreatmentTimeDto) {
+  @Post('search/all')
+  search(@Body() searchDto: SearchTreatmentTimeDto) {
     return this.treatmentTimesService.search(searchDto);
   }
 }

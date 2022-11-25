@@ -98,6 +98,8 @@ export class Customer extends BaseSchema {
 
   @Prop({
     type: String,
+    default:
+      'https://d1pspl52z5rk07.cloudfront.net/assets/production/app/default/avatar-13e49413d14d7528c1dba3d70cb39957e4aa4b997dff5cf4cd6c89992da9aaa5.png',
   })
   image: string;
 }

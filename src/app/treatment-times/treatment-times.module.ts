@@ -7,6 +7,7 @@ import {
 import { CustomersModule } from '../customers/customers.module';
 import { DoctorsModule } from '../doctors/doctors.module';
 import { UsersModule } from '../users/users.module';
+import { NotificationGateway } from './notification.gateway';
 import { TreatmentTimesController } from './treatment-times.controller';
 import { TreatmentTimesService } from './treatment-times.service';
 
@@ -20,7 +21,7 @@ import { TreatmentTimesService } from './treatment-times.service';
     forwardRef(() => DoctorsModule),
   ],
   controllers: [TreatmentTimesController],
-  providers: [TreatmentTimesService],
-  exports: [MongooseModule, TreatmentTimesService],
+  providers: [TreatmentTimesService, NotificationGateway],
+  exports: [MongooseModule, TreatmentTimesService, NotificationGateway],
 })
 export class TreatmentTimesModule {}
