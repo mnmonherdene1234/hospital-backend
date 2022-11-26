@@ -54,6 +54,7 @@ export class Customer extends BaseSchema {
 
   @Prop({
     type: String,
+    default: ""
   })
   email: string;
 

@@ -15,18 +15,11 @@ export class NotificationGateway {
   @WebSocketServer()
   server: Server;
 
-  @SubscribeMessage('message')
-  handleMessage(@MessageBody() message: string) {
-    this.server.emit('message', message);
-  }
-
   @Cron(CronExpression.EVERY_SECOND)
-  async sendMessages() {
+  async sendNotification() {
     const times = await this.treatmentTimesService.findNotificationTimes();
-    if (!times) return;
+    if (times.length == 0) return;
 
-    times.forEach((time) => {
-      this.server.emit('message', JSON.stringify(time));
-    });
+    this.server.emit('notification', '');
   }
 }

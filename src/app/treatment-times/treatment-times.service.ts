@@ -177,9 +177,46 @@ export class TreatmentTimesService {
     const now: Date = new Date();
     const hourLater = new Date(now.setHours(now.getHours() + 1));
 
-    return await this.treatmentTimeModel.find({
+    const times = await this.treatmentTimeModel.find({
       start_time: { $gte: now, $lte: hourLater },
       seen: false,
+      sent: false,
     });
+
+    if (!times) return times;
+
+    const updateRes = await this.treatmentTimeModel.updateMany(
+      {
+        start_time: { $gte: now, $lte: hourLater },
+        seen: false,
+        sent: false,
+      },
+      { $set: { sent: true } },
+    );
+
+    if (!updateRes.modifiedCount) return [];
+
+    return times;
+  }
+
+  async notifications() {
+    const now: Date = new Date();
+    const hourLater = new Date(now.setHours(now.getHours() + 1));
+
+    return await this.treatmentTimeModel
+      .find({
+        start_time: { $lte: hourLater },
+      })
+      .sort('-start_time')
+      .limit(10)
+      .populate(['doctor', 'customer', 'created_by', 'updated_by']);
+  }
+
+  async getNotification(id: string) {
+    return await this.treatmentTimeModel
+      .findByIdAndUpdate(id, {
+        $set: { seen: true },
+      })
+      .populate(['doctor', 'customer', 'created_by', 'updated_by']);
   }
 }

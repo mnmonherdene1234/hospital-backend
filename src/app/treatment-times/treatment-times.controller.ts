@@ -71,6 +71,16 @@ export class TreatmentTimesController {
     return this.treatmentTimesService.findFuture();
   }
 
+  @Get('type/notifications')
+  notifications() {
+    return this.treatmentTimesService.notifications();
+  }
+
+  @Get('type/notifications/:id')
+  getNotification(@Param('id') id: string) {
+    return this.treatmentTimesService.getNotification(id);
+  }
+
   @Post('search/all')
   search(@Body() searchDto: SearchTreatmentTimeDto) {
     return this.treatmentTimesService.search(searchDto);

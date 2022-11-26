@@ -42,6 +42,12 @@ export class TreatmentTime extends BaseSchema {
     type: Boolean,
   })
   seen: boolean;
+
+  @Prop({
+    default: false,
+    type: Boolean,
+  })
+  sent: boolean;
 }
 
 export const TreatmentTimeSchema = SchemaFactory.createForClass(TreatmentTime);
