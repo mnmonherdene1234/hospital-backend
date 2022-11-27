@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
@@ -178,23 +178,18 @@ export class TreatmentTimesService {
     const hourLater = new Date(now.setHours(now.getHours() + 1));
 
     const times = await this.treatmentTimeModel.find({
-      start_time: { $gte: now, $lte: hourLater },
+      start_time: { $lte: hourLater },
       seen: false,
       sent: false,
     });
 
-    if (!times) return times;
-
-    const updateRes = await this.treatmentTimeModel.updateMany(
+    await this.treatmentTimeModel.updateMany(
       {
-        start_time: { $gte: now, $lte: hourLater },
         seen: false,
         sent: false,
       },
       { $set: { sent: true } },
     );
-
-    if (!updateRes.modifiedCount) return [];
 
     return times;
   }

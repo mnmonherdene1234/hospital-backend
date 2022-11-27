@@ -67,7 +67,7 @@ export class DoctorsService {
     let restCheckedDoctors = [];
 
     doctors.forEach(async (doctor) => {
-      const doctorDay = doctor.working_hours[day - 1];
+      const doctorDay = doctor.working_hours[day];
       if (!doctorDay?.start_time || !doctorDay?.end_time) return;
 
       const doctorStartTime: Date = new Date(startTime);

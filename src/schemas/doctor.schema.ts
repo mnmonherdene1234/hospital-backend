@@ -72,13 +72,13 @@ export class Doctor extends BaseSchema {
 
   @Prop({
     default: [
-      { id: 0, day: 'monday', start_time: '09:00:00', end_time: '18:00:00' },
-      { id: 1, day: 'tuesday', start_time: '09:00:00', end_time: '18:00:00' },
-      { id: 2, day: 'wednesday', start_time: '09:00:00', end_time: '18:00:00' },
-      { id: 3, day: 'thursday', start_time: '09:00:00', end_time: '18:00:00' },
-      { id: 4, day: 'friday', start_time: '09:00:00', end_time: '18:00:00' },
-      { id: 5, day: 'saturday', start_time: '09:00:00', end_time: '18:00:00' },
-      { id: 6, day: 'sunday', start_time: '09:00:00', end_time: '18:00:00' },
+      { id: 0, day: 'sunday', start_time: '09:00:00', end_time: '18:00:00' },
+      { id: 1, day: 'monday', start_time: '09:00:00', end_time: '18:00:00' },
+      { id: 2, day: 'tuesday', start_time: '09:00:00', end_time: '18:00:00' },
+      { id: 3, day: 'wednesday', start_time: '09:00:00', end_time: '18:00:00' },
+      { id: 4, day: 'thursday', start_time: '09:00:00', end_time: '18:00:00' },
+      { id: 5, day: 'friday', start_time: '09:00:00', end_time: '18:00:00' },
+      { id: 6, day: 'saturday', start_time: '09:00:00', end_time: '18:00:00' },
     ],
   })
   working_hours: WorkingHours[];
