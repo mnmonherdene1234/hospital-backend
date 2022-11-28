@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
@@ -128,11 +128,13 @@ export class TreatmentTimesService {
       startDate.setHours(0);
       startDate.setHours(0);
       startDate.setSeconds(0);
+      startDate.setMilliseconds(0);
 
       var endDate = new Date(dto.end_date);
       endDate.setHours(23);
       endDate.setMinutes(59);
       endDate.setSeconds(59);
+      endDate.setMilliseconds(0);
       filter.start_date = { $gte: startDate };
       filter.endDate = { $lte: endDate };
     }
@@ -213,5 +215,11 @@ export class TreatmentTimesService {
         $set: { seen: true },
       })
       .populate(['doctor', 'customer', 'created_by', 'updated_by']);
+  }
+
+  async mondayTimes() {
+    const now: Date = new Date();
+    const day: number = now.getDay();
+    const difference: number = now.getDate() - day + (day == 0 ? -6 : 1);
   }
 }
