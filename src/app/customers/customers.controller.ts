@@ -81,6 +81,21 @@ export class CustomersController {
     return this.customersService.genderDonut();
   }
 
+  @Get('info/weekly-customer-growth')
+  weeklyCustomerGrowth() {
+    return this.customersService.weeklyGrowth();
+  }
+
+  @Get('info/monthly-customer-growth')
+  monthlyCustomerGrowth() {
+    return this.customersService.monthlyGrowth();
+  }
+
+  @Get('info/year-customer-growth')
+  yearCustomerGrowth() {
+    return this.customersService.yearGrowth();
+  }
+
   @Get('info/registered-count')
   registeredCount(): Promise<number> {
     return this.customersService.registeredCount();

@@ -132,4 +132,63 @@ export class CustomersService {
       gender: Gender.Undefined,
     });
   }
+
+  calculateCustomerGrowth(newCount: number, oldCount: number) {
+    const percent: number = +(
+      100 * Math.abs((newCount - oldCount) / ((newCount + oldCount) / 2))
+    ).toFixed(2);
+
+    const distance: number = Math.abs(newCount - oldCount);
+
+    return {
+      new: newCount,
+      old: oldCount,
+      percent,
+      distance,
+    };
+  }
+
+  async weeklyGrowth() {
+    const newCount: number = await this.customerModel.count();
+
+    const now: Date = new Date();
+    const weekAgo: Date = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() - 7,
+    );
+    const oldCount: number = await this.customerModel.count({
+      created_at: { $lte: weekAgo },
+    });
+
+    return this.calculateCustomerGrowth(newCount, oldCount);
+  }
+
+  async monthlyGrowth() {
+    const newCount: number = await this.customerModel.count();
+    const monthAgo: Date = new Date();
+
+    monthAgo.setMonth(monthAgo.getMonth() - 1);
+    monthAgo.setHours(0, 0, 0, 0);
+
+    const oldCount: number = await this.customerModel.count({
+      created_at: { $lte: monthAgo },
+    });
+
+    return this.calculateCustomerGrowth(newCount, oldCount);
+  }
+
+  async yearGrowth() {
+    const newCount: number = await this.customerModel.count();
+    const yearAgo: Date = new Date();
+
+    yearAgo.setFullYear(yearAgo.getFullYear() - 1);
+    yearAgo.setHours(0, 0, 0, 0);
+
+    const oldCount: number = await this.customerModel.count({
+      created_at: { $lte: yearAgo },
+    });
+
+    return this.calculateCustomerGrowth(newCount, oldCount);
+  }
 }
