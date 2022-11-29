@@ -19,14 +19,14 @@ export class BaseSchema {
   @Prop({
     required: false,
     type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
+    ref: 'users',
   })
   created_by: User;
 
   @Prop({
     required: false,
     type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
+    ref: 'users',
     default: null,
   })
   updated_by: User;
