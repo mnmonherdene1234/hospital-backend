@@ -22,6 +22,10 @@ export class CreateDoctorDto {
   role: string;
 
   @IsString()
+  @IsOptional()
+  color: string;
+
+  @IsString()
   @MinLength(8)
   @IsOptional()
   phone: string;

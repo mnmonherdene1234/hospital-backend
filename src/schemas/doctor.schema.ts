@@ -46,6 +46,12 @@ export class Doctor extends BaseSchema {
 
   @Prop({
     type: String,
+    default: '#64A2F8',
+  })
+  color: string;
+
+  @Prop({
+    type: String,
   })
   phone: string;
 

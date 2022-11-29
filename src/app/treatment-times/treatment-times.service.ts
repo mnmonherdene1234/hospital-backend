@@ -54,13 +54,17 @@ export class TreatmentTimesService {
 
     if (startTime < now) throw new BadRequestException('PAST_TENSE');
 
-    this.doctorsService.exists(dto.doctor);
-    const customer = await this.customersService.findByPhoneOrCreate(
-      dto.customer_phone,
-      dto.created_by,
-    );
+    if (dto.doctor) this.doctorsService.exists(dto.doctor);
 
-    dto.customer = customer.id;
+    if (dto.customer_phone) {
+      var customer = await this.customersService.findByPhoneOrCreate(
+        dto.customer_phone,
+        dto.created_by,
+      );
+
+      dto.customer = customer.id;
+    }
+
     return await this.treatmentTimeModel.findByIdAndUpdate(id, {
       $set: { ...dto },
     });
