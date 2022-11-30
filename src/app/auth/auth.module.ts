@@ -13,7 +13,7 @@ import { HttpModule } from '@nestjs/axios';
     UsersModule,
     PassportModule,
     JwtModule.register({
-      secret: process.env.JWT_SECRET,
+      secret: "8-FxMmh2mJP4XJA9Gecu6q-vJrRJSPHfTurSy5xHDuI",
     }),
     HttpModule,
   ],
