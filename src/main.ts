@@ -13,7 +13,11 @@ async function bootstrap() {
     origin: '*',
   });
   app.setGlobalPrefix('/v1/api');
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
   app.useGlobalFilters(new HttpExceptionFilter());
   await app.listen(process.env.PORT || 64536);
   const logger: Logger = new Logger('SERVER');

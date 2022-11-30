@@ -4,10 +4,13 @@ import { Model, now } from 'mongoose';
 import {
   Customer,
   CustomerDocument,
+  CustomerType,
   Gender,
+  Rate,
 } from 'src/schemas/customer.schema';
 import { Treatment, TreatmentDocument } from 'src/schemas/treatment.schema';
 import { CreateCustomerDto } from './dto/create-customer.dto';
+import { CustomerPaginationDto } from './dto/customer-pagination.dto';
 import { CustomerSearchDto } from './dto/customer-search.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 
@@ -76,6 +79,38 @@ export class CustomersService {
         { email: { $regex: `${search.email}`, $options: 'i' } },
       ],
     });
+  }
+
+  async pagination(pagination: CustomerPaginationDto) {
+    const { page, page_size, gender, rate, type } = pagination;
+    const filter: any = {};
+
+    if (gender != Gender.All) filter.gender = gender;
+
+    if (rate != Rate.All) filter.rate = rate;
+
+    if (type == CustomerType.Registered)
+      filter.gender = { $ne: Gender.Undefined };
+    else if (type == CustomerType.Advice) filter.gender = Gender.Undefined;
+
+    const data = await this.customerModel
+      .find(filter)
+      .skip((page - 1) * page_size)
+      .limit(page_size)
+      .populate(['created_by', 'updated_by'])
+      .sort('-created_at');
+
+    const total = await this.customerModel.count(filter);
+
+    return {
+      data,
+      meta: {
+        filter,
+        page,
+        page_size,
+        total,
+      },
+    };
   }
 
   async findByPhone(phone: string) {

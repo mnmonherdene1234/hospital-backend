@@ -11,6 +11,7 @@ import { DoctorsService } from '../doctors/doctors.service';
 import { CreateTreatmentTimeDto } from './dto/create-treatment-time.dto';
 import { SearchTreatmentTimeDto } from './dto/search-treatment-time.dto';
 import { UpdateTreatmentTimeDto } from './dto/update-treatment-time.dto';
+import { UserTimeDto, WeeklyTimesDto } from './dto/weekly-times.dto';
 
 @Injectable()
 export class TreatmentTimesService {
@@ -28,10 +29,20 @@ export class TreatmentTimesService {
     if (startTime < now) throw new BadRequestException('PAST_TENSE');
 
     this.doctorsService.exists(dto.doctor);
+
+    const doctors = await this.doctorsService.available({
+      start_time: dto.start_time,
+      end_time: dto.end_time,
+    });
+
+    if (!doctors.some((doctor) => doctor?.id == dto.doctor))
+      throw new BadRequestException('DOCTOR_NOT_AVAILABLE');
+
     const customer = await this.customersService.findByPhoneOrCreate(
       dto.customer_phone,
       dto.created_by,
     );
+
     dto.customer = customer.id;
     return await new this.treatmentTimeModel(dto).save();
   }
@@ -49,12 +60,28 @@ export class TreatmentTimesService {
   }
 
   async update(id: string, dto: UpdateTreatmentTimeDto) {
+    await this.exists(id);
+
+    const time = await this.treatmentTimeModel.findById(id);
+
     const now: Date = new Date();
     const startTime: Date = new Date(dto.start_time);
+    const endTime: Date = new Date(dto.end_time);
 
-    if (startTime < now) throw new BadRequestException('PAST_TENSE');
+    if (endTime < now) throw new BadRequestException('PAST_TENSE');
 
-    if (dto.doctor) this.doctorsService.exists(dto.doctor);
+    if (dto.doctor) {
+      this.doctorsService.exists(dto.doctor);
+      startTime.setMinutes(startTime.getMinutes() + 1);
+      endTime.setMinutes(endTime.getMinutes() - 1);
+      const doctors = await this.doctorsService.available({
+        start_time: startTime,
+        end_time: endTime,
+      });
+
+      if (!doctors.some((doctor) => doctor?.id == dto.doctor))
+        throw new BadRequestException('DOCTOR_NOT_AVAILABLE');
+    }
 
     if (dto.customer_phone) {
       var customer = await this.customersService.findByPhoneOrCreate(
@@ -71,6 +98,11 @@ export class TreatmentTimesService {
   }
 
   async remove(id: string) {
+    await this.exists(id);
+    const time = await this.treatmentTimeModel.findById(id);
+
+    if (time.end_time < new Date()) throw new BadRequestException('PAST_TENSE');
+
     return await this.treatmentTimeModel.findByIdAndDelete(id);
   }
 
@@ -177,6 +209,59 @@ export class TreatmentTimesService {
         total,
       },
     };
+  }
+
+  async weeklyTimes() {
+    const now: Date = new Date();
+    now.setHours(0, 0, 0, 0);
+    const weekLater: Date = new Date();
+    weekLater.setHours(23, 59, 59, 999);
+    weekLater.setDate(now.getDate() + 6);
+
+    const times = await this.treatmentTimeModel
+      .find({
+        start_time: { $gte: now },
+        end_time: { $lte: weekLater },
+      })
+      .populate(['doctor', 'customer', 'created_by', 'updated_by']);
+
+    const weeklyTimes: WeeklyTimesDto[] = [];
+
+    for (let i = 0; i <= 6; i++) {
+      const startTime: Date = new Date();
+      startTime.setHours(0, 0, 0, 0);
+      startTime.setDate(startTime.getDate() + i);
+      const endTime: Date = new Date(startTime);
+      endTime.setDate(startTime.getDate() + 1);
+
+      const weeklyTime: WeeklyTimesDto = {
+        date: startTime,
+        day: startTime.getDay(),
+        times: [],
+      };
+
+      const filtered = times.filter(
+        (time) =>
+          new Date(time.start_time) >= startTime &&
+          new Date(time.start_time) <= endTime,
+      );
+
+      for (const time of filtered) {
+        const userTime: UserTimeDto = {
+          image: time?.customer?.image,
+          name: `${time?.customer?.first_name} ${time?.customer?.last_name}`,
+          phone: time?.customer?.phone,
+          start_time: time?.start_time,
+          end_time: time?.end_time,
+        };
+
+        weeklyTime.times.push(userTime);
+      }
+
+      weeklyTimes.push(weeklyTime);
+    }
+
+    return weeklyTimes;
   }
 
   async findNotificationTimes() {

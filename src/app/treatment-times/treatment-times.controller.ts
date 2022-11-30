@@ -66,6 +66,11 @@ export class TreatmentTimesController {
     return this.treatmentTimesService.todayTimes();
   }
 
+  @Get('info/weekly-times')
+  weeklyTimes() {
+    return this.treatmentTimesService.weeklyTimes();
+  }
+
   @Get('type/future')
   findFuture() {
     return this.treatmentTimesService.findFuture();

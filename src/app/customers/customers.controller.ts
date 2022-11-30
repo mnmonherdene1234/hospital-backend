@@ -16,6 +16,7 @@ import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
+import { CustomerPaginationDto } from './dto/customer-pagination.dto';
 import { CustomerSearchDto } from './dto/customer-search.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 
@@ -74,6 +75,11 @@ export class CustomersController {
   @Get('info/search')
   search(@Query() query: CustomerSearchDto) {
     return this.customersService.search(query);
+  }
+
+  @Get('info/pagination')
+  pagination(@Query() query: CustomerPaginationDto) {
+    return this.customersService.pagination(query);
   }
 
   @Get('info/gender-donut')

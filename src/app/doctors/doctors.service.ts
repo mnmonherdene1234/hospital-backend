@@ -90,15 +90,15 @@ export class DoctorsService {
 
     const treatmentTimes = await this.treatmentTimesModel.find({
       $or: [
-        { end_time: { $lte: endTime, $gte: startTime } },
-        { start_time: { $gte: startTime, $lte: endTime } },
+        { end_time: { $lt: endTime, $gt: startTime } },
+        { start_time: { $gt: startTime, $lt: endTime } },
         {
-          start_time: { $gte: startTime },
-          end_time: { $lte: endTime },
+          start_time: { $gt: startTime },
+          end_time: { $lt: endTime },
         },
         {
-          start_time: { $lte: startTime },
-          end_time: { $gte: endTime },
+          start_time: { $lt: startTime },
+          end_time: { $gt: endTime },
         },
       ],
     });

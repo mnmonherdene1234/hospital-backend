@@ -4,7 +4,14 @@ import transform from './utils/transform';
 
 export type CustomerDocument = Customer & Document;
 
+export enum CustomerType {
+  All = 'ALL',
+  Registered = 'REGISTERED',
+  Advice = 'ADVICE',
+}
+
 export enum Gender {
+  All = 'ALL',
   Male = 'MALE',
   Female = 'FEMALE',
   Undefined = 'UNDIFINED',
@@ -25,6 +32,7 @@ export enum BloodType {
 }
 
 export enum Rate {
+  All = 'ALL',
   Good = 'GOOD',
   Bad = 'BAD',
 }
