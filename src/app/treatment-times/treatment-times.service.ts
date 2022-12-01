@@ -70,19 +70,6 @@ export class TreatmentTimesService {
 
     if (endTime < now) throw new BadRequestException('PAST_TENSE');
 
-    if (dto.doctor) {
-      this.doctorsService.exists(dto.doctor);
-      startTime.setMinutes(startTime.getMinutes() + 1);
-      endTime.setMinutes(endTime.getMinutes() - 1);
-      const doctors = await this.doctorsService.available({
-        start_time: startTime,
-        end_time: endTime,
-      });
-
-      if (!doctors.some((doctor) => doctor?.id == dto.doctor))
-        throw new BadRequestException('DOCTOR_NOT_AVAILABLE');
-    }
-
     if (dto.customer_phone) {
       var customer = await this.customersService.findByPhoneOrCreate(
         dto.customer_phone,
