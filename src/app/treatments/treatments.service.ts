@@ -163,4 +163,114 @@ export class TreatmentsService {
 
     return total;
   }
+
+  async servicesChart() {
+    const today: Date = new Date();
+    today.setHours(0, 0, 0, 0);
+    today.setDate(today.getDate() - 7);
+
+    const treatments = await this.treatmentModel
+      .find({
+        created_at: { $gte: today },
+      })
+      .select(['services', 'created_at'])
+      .populate('services');
+
+    type ServiceType = {
+      id: string;
+      name: string;
+      date: Date;
+    };
+
+    type GroupServiceType = {
+      id: string;
+      name: string;
+      services: ServiceType[];
+      count: number;
+    };
+
+    const services: ServiceType[] = [];
+
+    treatments.forEach((treatment) => {
+      treatment.services.forEach((service) => {
+        services.push({
+          id: service['id'],
+          name: service.name,
+          date: new Date(treatment.created_at),
+        });
+      });
+    });
+
+    const servicesIds: string[] = services.map((service) => service.id);
+    const uniqueServicesIds: string[] = [...new Set(servicesIds)];
+
+    const serviceGroups: GroupServiceType[] = [];
+
+    uniqueServicesIds.forEach((uniqueId) => {
+      const groupServices = services.filter(
+        (service) => service.id === uniqueId,
+      );
+      serviceGroups.push({
+        id: uniqueId,
+        name: groupServices[0]?.name ?? 'NO_NAME',
+        services: groupServices,
+        count: groupServices.length,
+      });
+    });
+
+    serviceGroups.sort((a, b) => (a.count < b.count ? 1 : -1));
+
+    const top3 = serviceGroups.slice(0, 3);
+
+    const days: string[] = ['Ня', 'Да', 'Мя', 'Лх', 'Пү', 'Ба', 'Бя'];
+
+    const now: Date = new Date();
+    now.setHours(0, 0, 0, 0);
+
+    const dates: Date[] = [];
+    const categories: string[] = [];
+
+    for (let i = 7; i >= 1; i--) {
+      const date = new Date(now);
+      date.setDate(date.getDate() - i);
+      categories.push(days[date.getDay()]);
+      dates.push(date);
+    }
+
+    type SeriesType = {
+      name: string;
+      data: number[];
+    };
+
+    const series: SeriesType[] = [];
+
+    top3.forEach((top) => {
+      let topSeries: SeriesType = {
+        name: top.name,
+        data: [],
+      };
+
+      dates.forEach((date) => {
+        const startDate: Date = new Date(date);
+        const endDate: Date = new Date(date);
+        endDate.setHours(23, 59, 59, 999);
+
+        const count: number = services.filter(
+          (service) =>
+            service.date >= startDate &&
+            service.date <= endDate &&
+            service.id == top.id,
+        ).length;
+
+        topSeries.data.push(count);
+      });
+
+      series.push(topSeries);
+    });
+
+    return {
+      series,
+      categories,
+    };
+  }
 }

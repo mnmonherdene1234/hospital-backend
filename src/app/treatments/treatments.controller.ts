@@ -59,4 +59,9 @@ export class TreatmentsController {
   findByCustomer(@Param('id') id: string) {
     return this.treatmentsService.findByCustomer(id);
   }
+
+  @Get('info/services-chart')
+  servicesChart() {
+    return this.treatmentsService.servicesChart();
+  }
 }
