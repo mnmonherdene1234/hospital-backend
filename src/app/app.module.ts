@@ -19,6 +19,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { TreatmentTimesModule } from './treatment-times/treatment-times.module';
 import { ResourcesModule } from './resources/resources.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { BonusModule } from './bonus/bonus.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     TreatmentsModule,
     TreatmentTimesModule,
     ResourcesModule,
+    BonusModule,
   ],
   controllers: [AppController],
   providers: [AppService],
