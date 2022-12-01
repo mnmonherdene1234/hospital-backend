@@ -293,9 +293,22 @@ export class TreatmentTimesService {
       .populate(['doctor', 'customer', 'created_by', 'updated_by']);
   }
 
-  async mondayTimes() {
-    const now: Date = new Date();
-    const day: number = now.getDay();
-    const difference: number = now.getDate() - day + (day == 0 ? -6 : 1);
+  async findByTimeRange(start: Date, end: Date) {
+    return await this.treatmentTimeModel
+      .find({
+        $or: [
+          { end_time: { $lt: end, $gt: start } },
+          { start_time: { $gt: start, $lt: end } },
+          {
+            start_time: { $gt: start },
+            end_time: { $lt: end },
+          },
+          {
+            start_time: { $lt: start },
+            end_time: { $gt: end },
+          },
+        ],
+      })
+      .populate(['doctor', 'customer', 'created_by', 'updated_by']);
   }
 }

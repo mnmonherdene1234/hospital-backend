@@ -17,11 +17,17 @@ export class BonusService {
   }
 
   async findAll() {
-    return await this.bonusModel.find();
+    return await this.bonusModel
+      .find()
+      .populate(['created_by', 'updated_by'])
+      .sort('-created_at');
   }
 
   async findOne(id: string) {
-    return await this.bonusModel.findById(id);
+    return await this.bonusModel
+      .findById(id)
+      .populate(['created_by', 'updated_by'])
+      .sort('-created_at');
   }
 
   async update(id: string, dto: UpdateBonusDto) {

@@ -22,6 +22,6 @@ import { TreatmentTimesService } from './treatment-times.service';
   ],
   controllers: [TreatmentTimesController],
   providers: [TreatmentTimesService, NotificationGateway],
-  exports: [MongooseModule, TreatmentTimesService, NotificationGateway],
+  exports: [TreatmentTimesService, MongooseModule, NotificationGateway],
 })
 export class TreatmentTimesModule {}

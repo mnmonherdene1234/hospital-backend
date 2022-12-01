@@ -1,12 +1,18 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, now } from 'mongoose';
+import { Document, Model, now, Types } from 'mongoose';
 import { Doctor, DoctorDocument } from 'src/schemas/doctor.schema';
 import {
   TreatmentTime,
   TreatmentTimeDocument,
 } from 'src/schemas/treatment-time.schema';
 import { Treatment, TreatmentDocument } from 'src/schemas/treatment.schema';
+import { TreatmentTimesService } from '../treatment-times/treatment-times.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { FindAvailableDoctorsDto } from './dto/find-available.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
@@ -20,6 +26,8 @@ export class DoctorsService {
     private readonly treatmentModel: Model<TreatmentDocument>,
     @InjectModel(TreatmentTime.schemaName)
     private readonly treatmentTimesModel: Model<TreatmentTimeDocument>,
+    @Inject(forwardRef(() => TreatmentTimesService))
+    private readonly treatmentTimesService: TreatmentTimesService,
   ) {}
 
   async create(createDoctorDto: CreateDoctorDto) {
@@ -59,69 +67,75 @@ export class DoctorsService {
     return await this.doctorModel.count();
   }
 
-  async available(findAvailableDoctorsDto: FindAvailableDoctorsDto) {
-    const startTime: Date = new Date(findAvailableDoctorsDto.start_time);
-    const endTime: Date = new Date(findAvailableDoctorsDto.end_time);
-    const day = startTime.getDay();
+  async restlessDoctors(start: Date, end: Date) {
+    const day = start.getDay();
     const doctors = await this.findAll();
-    let restCheckedDoctors = [];
+    let restlessDoctors: Omit<
+      Document<unknown, any, DoctorDocument> &
+        Doctor &
+        Document & {
+          _id: Types.ObjectId;
+        },
+      never
+    >[] = [];
 
     doctors.forEach(async (doctor) => {
       const doctorDay = doctor.working_hours[day];
       if (!doctorDay?.start_time || !doctorDay?.end_time) return;
 
-      const doctorStartTime: Date = new Date(startTime);
+      const doctorStartTime: Date = new Date(start);
       const [startHours, startMinutes, startSeconds] =
         doctorDay.start_time.split(':');
       doctorStartTime.setHours(+startHours);
       doctorStartTime.setMinutes(+startMinutes);
       doctorStartTime.setSeconds(+startSeconds);
 
-      const doctorEndTime: Date = new Date(endTime);
+      const doctorEndTime: Date = new Date(end);
       const [endHours, endMinutes, endSeconds] = doctorDay.end_time.split(':');
       doctorEndTime.setHours(+endHours);
       doctorEndTime.setMinutes(+endMinutes);
       doctorEndTime.setSeconds(+endSeconds);
 
-      if (startTime >= doctorStartTime && endTime <= doctorEndTime) {
-        restCheckedDoctors.push(doctor);
+      if (start >= doctorStartTime && end <= doctorEndTime) {
+        restlessDoctors.push(doctor);
       }
     });
 
-    const treatmentTimes = await this.treatmentTimesModel.find({
-      $or: [
-        { end_time: { $lt: endTime, $gt: startTime } },
-        { start_time: { $gt: startTime, $lt: endTime } },
-        {
-          start_time: { $gt: startTime },
-          end_time: { $lt: endTime },
-        },
-        {
-          start_time: { $lt: startTime },
-          end_time: { $gt: endTime },
-        },
-      ],
-    });
+    return restlessDoctors;
+  }
+
+  async available(findAvailableDoctorsDto: FindAvailableDoctorsDto) {
+    const startTime: Date = new Date(findAvailableDoctorsDto.start_time);
+    const endTime: Date = new Date(findAvailableDoctorsDto.end_time);
+
+    const restlessDoctors = await this.restlessDoctors(startTime, endTime);
+
+    // const treatmentTimes = await this.treatmentTimesService.findByTimeRange(
+    //   startTime,
+    //   endTime,
+    // );
+
+    const treatmentTimes = [];
 
     let busyDoctorsIds: string[] = [];
 
     treatmentTimes.forEach(async (treatmentTime) => {
-      busyDoctorsIds.push(treatmentTime.doctor as unknown as string);
+      busyDoctorsIds.push(treatmentTime.doctor['id']);
     });
 
     let availableDoctors = [];
 
-    for (let i = 0; i < restCheckedDoctors.length; i++) {
+    for (let i = 0; i < restlessDoctors.length; i++) {
       let isBusy = false;
       for (let k = 0; k < busyDoctorsIds.length; k++) {
-        if (restCheckedDoctors[i].id == busyDoctorsIds[k]) {
+        if (restlessDoctors[i].id == busyDoctorsIds[k]) {
           isBusy = true;
           break;
         }
       }
 
       if (!isBusy) {
-        availableDoctors.push(restCheckedDoctors[i]);
+        availableDoctors.push(restlessDoctors[i]);
       }
     }
 
