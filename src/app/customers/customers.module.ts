@@ -11,8 +11,8 @@ import { CustomersService } from './customers.service';
     MongooseModule.forFeature([
       { name: Customer.schemaName, schema: CustomerSchema },
     ]),
-    forwardRef(() => TreatmentsModule),
     UsersModule,
+    forwardRef(() => TreatmentsModule),
   ],
   controllers: [CustomersController],
   providers: [CustomersService],

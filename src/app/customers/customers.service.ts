@@ -1,5 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { Model, now } from 'mongoose';
 import {
   Customer,
@@ -9,6 +15,7 @@ import {
   Rate,
 } from 'src/schemas/customer.schema';
 import { Treatment, TreatmentDocument } from 'src/schemas/treatment.schema';
+import { TreatmentsService } from '../treatments/treatments.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { CustomerPaginationDto } from './dto/customer-pagination.dto';
 import { CustomerSearchDto } from './dto/customer-search.dto';
@@ -21,6 +28,8 @@ export class CustomersService {
     private readonly customerModel: Model<CustomerDocument>,
     @InjectModel(Treatment.schemaName)
     private readonly treatmentModel: Model<TreatmentDocument>,
+    @Inject(forwardRef(() => TreatmentsService))
+    private readonly treatmentsService: TreatmentsService,
   ) {}
 
   async create(createCustomerDto: CreateCustomerDto) {
@@ -41,14 +50,14 @@ export class CustomersService {
   async findAll() {
     return await this.customerModel
       .find()
-      .populate(['created_by', 'updated_by'])
+      .populate(['created_by', 'updated_by', 'bonus'])
       .sort('-created_at');
   }
 
   async findOne(id: string) {
     return await this.customerModel
       .findById(id)
-      .populate(['created_by', 'updated_by']);
+      .populate(['created_by', 'updated_by', 'bonus']);
   }
 
   async update(id: string, updateCustomerDto: UpdateCustomerDto) {
@@ -97,7 +106,7 @@ export class CustomersService {
       .find(filter)
       .skip((page - 1) * page_size)
       .limit(page_size)
-      .populate(['created_by', 'updated_by'])
+      .populate(['created_by', 'updated_by', 'bonus'])
       .sort('-created_at');
 
     const total = await this.customerModel.count(filter);
@@ -225,5 +234,23 @@ export class CustomersService {
     });
 
     return this.calculateCustomerGrowth(newCount, oldCount);
+  }
+
+  @Cron(CronExpression.EVERY_10_MINUTES)
+  async reviewTotal() {
+    const customers = await this.findAll();
+    customers.forEach(async (customer) => {
+      const total = await this.treatmentsService.customerTotal(customer.id);
+      customer.total = total;
+      await customer.save();
+    });
+  }
+
+  async findByBonus(bonus_id: string) {
+    return this.customerModel
+      .find({
+        bonus: bonus_id,
+      })
+      .populate(['created_by', 'updated_by', 'bonus']);
   }
 }

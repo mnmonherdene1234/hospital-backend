@@ -1,4 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import mongoose from 'mongoose';
+import { Bonus } from './bonus.schema';
 import { BaseSchema } from './utils/base.schema';
 import transform from './utils/transform';
 
@@ -111,6 +113,19 @@ export class Customer extends BaseSchema {
       'https://d1pspl52z5rk07.cloudfront.net/assets/production/app/default/avatar-13e49413d14d7528c1dba3d70cb39957e4aa4b997dff5cf4cd6c89992da9aaa5.png',
   })
   image: string;
+
+  @Prop({
+    type: Number,
+    default: 0,
+  })
+  total: number;
+
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: Bonus.schemaName,
+    default: null,
+  })
+  bonus: Bonus;
 }
 
 export const CustomerSchema = SchemaFactory.createForClass(Customer);

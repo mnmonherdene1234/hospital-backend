@@ -24,8 +24,6 @@ export class DoctorsService {
     private readonly doctorModel: Model<DoctorDocument>,
     @InjectModel(Treatment.schemaName)
     private readonly treatmentModel: Model<TreatmentDocument>,
-    @InjectModel(TreatmentTime.schemaName)
-    private readonly treatmentTimesModel: Model<TreatmentTimeDocument>,
     @Inject(forwardRef(() => TreatmentTimesService))
     private readonly treatmentTimesService: TreatmentTimesService,
   ) {}
@@ -108,37 +106,6 @@ export class DoctorsService {
     const startTime: Date = new Date(findAvailableDoctorsDto.start_time);
     const endTime: Date = new Date(findAvailableDoctorsDto.end_time);
 
-    const restlessDoctors = await this.restlessDoctors(startTime, endTime);
-
-    // const treatmentTimes = await this.treatmentTimesService.findByTimeRange(
-    //   startTime,
-    //   endTime,
-    // );
-
-    const treatmentTimes = [];
-
-    let busyDoctorsIds: string[] = [];
-
-    treatmentTimes.forEach(async (treatmentTime) => {
-      busyDoctorsIds.push(treatmentTime.doctor['id']);
-    });
-
-    let availableDoctors = [];
-
-    for (let i = 0; i < restlessDoctors.length; i++) {
-      let isBusy = false;
-      for (let k = 0; k < busyDoctorsIds.length; k++) {
-        if (restlessDoctors[i].id == busyDoctorsIds[k]) {
-          isBusy = true;
-          break;
-        }
-      }
-
-      if (!isBusy) {
-        availableDoctors.push(restlessDoctors[i]);
-      }
-    }
-
-    return availableDoctors;
+    return await this.restlessDoctors(startTime, endTime);
   }
 }

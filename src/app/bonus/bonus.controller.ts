@@ -53,4 +53,9 @@ export class BonusController {
   remove(@Param('id') id: string) {
     return this.bonusService.remove(id);
   }
+
+  @Get(':id/customers')
+  bonusCustomers(@Param('id') id: string) {
+    return this.bonusService.bonusCustomers(id);
+  }
 }

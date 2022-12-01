@@ -1,6 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Treatment, TreatmentSchema } from 'src/schemas/treatment.schema';
+import { BonusModule } from '../bonus/bonus.module';
 import { CustomersModule } from '../customers/customers.module';
 import { DoctorsModule } from '../doctors/doctors.module';
 import { ResourcesModule } from '../resources/resources.module';
@@ -18,6 +19,7 @@ import { TreatmentsService } from './treatments.service';
     forwardRef(() => DoctorsModule),
     forwardRef(() => CustomersModule),
     forwardRef(() => ServicesModule),
+    forwardRef(() => BonusModule),
     ResourcesModule,
   ],
   controllers: [TreatmentsController],

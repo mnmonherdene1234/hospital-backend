@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
@@ -18,25 +23,28 @@ export class TreatmentTimesService {
   constructor(
     @InjectModel(TreatmentTime.schemaName)
     private readonly treatmentTimeModel: Model<TreatmentTimeDocument>,
+    @Inject(forwardRef(() => DoctorsService))
     private readonly doctorsService: DoctorsService,
+    @Inject(forwardRef(() => CustomersService))
     private readonly customersService: CustomersService,
   ) {}
 
   async create(dto: CreateTreatmentTimeDto) {
     const now: Date = new Date();
     const startTime: Date = new Date(dto.start_time);
+    const endTime: Date = new Date(dto.end_time);
 
     if (startTime < now) throw new BadRequestException('PAST_TENSE');
 
     this.doctorsService.exists(dto.doctor);
 
-    const doctors = await this.doctorsService.available({
-      start_time: dto.start_time,
-      end_time: dto.end_time,
-    });
+    const doctors = await this.doctorsService.restlessDoctors(
+      startTime,
+      endTime,
+    );
 
     if (!doctors.some((doctor) => doctor?.id == dto.doctor))
-      throw new BadRequestException('DOCTOR_NOT_AVAILABLE');
+      throw new BadRequestException('DOCTOR_IS_RESTING');
 
     const customer = await this.customersService.findByPhoneOrCreate(
       dto.customer_phone,
@@ -50,7 +58,9 @@ export class TreatmentTimesService {
   async findAll() {
     return await this.treatmentTimeModel
       .find()
-      .populate(['doctor', 'customer', 'created_by', 'updated_by']);
+      .populate(['doctor', 'customer', 'created_by', 'updated_by'])
+      .sort('-created_at')
+      .limit(500);
   }
 
   async findOne(id: string) {
@@ -77,6 +87,17 @@ export class TreatmentTimesService {
       );
 
       dto.customer = customer.id;
+    }
+
+    if (dto.doctor) {
+      const availableDoctors = await this.doctorsService.restlessDoctors(
+        startTime,
+        endTime,
+      );
+
+      if (!availableDoctors.some((doctor) => doctor.id == dto.doctor)) {
+        throw new BadRequestException('DOCTOR_IS_RESTING');
+      }
     }
 
     return await this.treatmentTimeModel.findByIdAndUpdate(id, {
@@ -293,6 +314,12 @@ export class TreatmentTimesService {
       .populate(['doctor', 'customer', 'created_by', 'updated_by']);
   }
 
+  /**
+   * Treatment times find by start date and end date
+   * @param start
+   * @param end
+   * @returns 'doctor', 'customer', 'created_by', 'updated_by' populated array of time
+   */
   async findByTimeRange(start: Date, end: Date) {
     return await this.treatmentTimeModel
       .find({

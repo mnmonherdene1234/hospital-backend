@@ -1,10 +1,13 @@
 import {
   BadRequestException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, now } from 'mongoose';
+import { BonusType } from 'src/schemas/bonus.schema';
 import { Treatment, TreatmentDocument } from 'src/schemas/treatment.schema';
 import { CustomersService } from '../customers/customers.service';
 import { DoctorsService } from '../doctors/doctors.service';
@@ -19,24 +22,39 @@ export class TreatmentsService {
     @InjectModel(Treatment.schemaName)
     private readonly treatmentModel: Model<TreatmentDocument>,
     private readonly doctorsService: DoctorsService,
+    @Inject(forwardRef(() => CustomersService))
     private readonly customersService: CustomersService,
     private readonly servicesService: ServicesService,
     private readonly resourcesService: ResourcesService,
   ) {}
 
-  async create(createTreatmentDto: CreateTreatmentDto) {
-    await this.doctorsService.exists(createTreatmentDto.doctor);
-    await this.customersService.exists(createTreatmentDto.customer);
-    await this.servicesService.exists(createTreatmentDto.services);
-    const services = await this.servicesService.findByIds(
-      createTreatmentDto.services,
-    );
-    createTreatmentDto.price = services.reduce(
-      (pre, cur) => (pre += cur.price),
-      0,
-    );
+  async create(dto: CreateTreatmentDto) {
+    await this.doctorsService.exists(dto.doctor);
+    await this.customersService.exists(dto.customer);
+    await this.servicesService.exists(dto.services);
 
-    createTreatmentDto.services.forEach(async (service) => {
+    const services = await this.servicesService.findByIds(dto.services);
+
+    dto.price = services.reduce((pre, cur) => (pre += cur.price), 0);
+
+    const customer = await this.customersService.findOne(dto.customer);
+
+    if (customer.bonus) {
+      if (customer.bonus.type == BonusType.Price) {
+        dto.discount = customer.bonus.discount;
+        dto.price -= dto.discount;
+      } else if (customer.bonus.type == BonusType.Percent) {
+        const discount = (dto.price / 100) * customer.bonus.discount;
+        dto.price -= discount;
+        dto.discount = discount;
+      } else {
+        throw new BadRequestException('CUSTOMER_BONUS_TYPE_UNDEFINED');
+      }
+
+      dto.bonus = customer.bonus['id'];
+    }
+
+    dto.services.forEach(async (service) => {
       const res = await this.servicesService.findOne(service);
       res.resources.forEach(async (resource) => {
         await this.resourcesService.decrease(
@@ -46,7 +64,7 @@ export class TreatmentsService {
       });
     });
 
-    return await new this.treatmentModel(createTreatmentDto).save();
+    return await new this.treatmentModel(dto).save();
   }
 
   async findAll() {
@@ -130,5 +148,19 @@ export class TreatmentsService {
     return await this.treatmentModel
       .find({ customer: id })
       .populate(['doctor', 'customer', 'services', 'created_by', 'updated_by']);
+  }
+
+  async customerTotal(customer_id: string) {
+    const treatments = await this.treatmentModel.find({
+      customer: customer_id,
+    });
+
+    let total: number = 0;
+
+    treatments.forEach((treatment) => {
+      total += treatment.price;
+    });
+
+    return total;
   }
 }

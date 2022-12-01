@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
+import { Bonus } from './bonus.schema';
 import { Customer } from './customer.schema';
 import { Doctor } from './doctor.schema';
 import { Service } from './service.schema';
@@ -49,6 +50,18 @@ export class Treatment extends BaseSchema {
     type: Number,
   })
   price: number;
+
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: Bonus.schemaName,
+  })
+  bonus: Bonus;
+
+  @Prop({
+    type: Number,
+    default: 0,
+  })
+  discount: number;
 }
 
 export const TreatmentSchema = SchemaFactory.createForClass(Treatment);

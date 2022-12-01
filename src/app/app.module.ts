@@ -20,6 +20,7 @@ import { TreatmentTimesModule } from './treatment-times/treatment-times.module';
 import { ResourcesModule } from './resources/resources.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { BonusModule } from './bonus/bonus.module';
+import { AnythingModule } from './anything/anything.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { BonusModule } from './bonus/bonus.module';
     TreatmentTimesModule,
     ResourcesModule,
     BonusModule,
+    AnythingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

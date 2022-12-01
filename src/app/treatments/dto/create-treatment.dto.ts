@@ -27,6 +27,9 @@ export class CreateTreatmentDto {
   @IsDateString()
   end_time: Date;
 
+  bonus: string;
+  discount: number;
+
   created_by: string;
   updated_by: string;
 }
