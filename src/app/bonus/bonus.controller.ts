@@ -56,7 +56,6 @@ export class BonusController {
     return this.bonusService.remove(id);
   }
 
-  @Roles(Role.Admin)
   @Get(':id/customers')
   bonusCustomers(@Param('id') id: string) {
     return this.bonusService.bonusCustomers(id);
