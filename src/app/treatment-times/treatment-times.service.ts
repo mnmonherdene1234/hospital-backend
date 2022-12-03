@@ -78,7 +78,7 @@ export class TreatmentTimesService {
     const endTime: Date = new Date(dto.end_time);
     const beforeEndTime: Date = new Date(time.end_time);
 
-    if (endTime < now && beforeEndTime < now)
+    if (endTime < now || beforeEndTime < now)
       throw new BadRequestException('PAST_TENSE');
 
     if (dto.customer_phone) {
