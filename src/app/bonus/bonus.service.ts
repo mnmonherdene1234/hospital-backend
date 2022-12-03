@@ -64,7 +64,7 @@ export class BonusService {
     return await this.customersService.findByBonus(bonus_id);
   }
 
-  @Cron(CronExpression.EVERY_10_MINUTES)
+  @Cron(CronExpression.EVERY_MINUTE)
   async checkCustomersBonus() {
     const bonuses = await this.bonusModel.find();
     const customers = await this.customerModel.find();

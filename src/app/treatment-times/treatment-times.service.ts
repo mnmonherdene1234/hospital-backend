@@ -60,7 +60,7 @@ export class TreatmentTimesService {
       .find()
       .populate(['doctor', 'customer', 'created_by', 'updated_by'])
       .sort('-created_at')
-      .limit(500);
+      .limit(250);
   }
 
   async findOne(id: string) {

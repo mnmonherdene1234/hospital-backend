@@ -11,7 +11,7 @@ export class NotificationGateway {
   @WebSocketServer()
   server: Server;
 
-  @Cron(CronExpression.EVERY_30_SECONDS)
+  @Cron(CronExpression.EVERY_10_SECONDS)
   async sendNotification() {
     const times = await this.treatmentTimesService.findNotificationTimes();
     if (times.length == 0) return;

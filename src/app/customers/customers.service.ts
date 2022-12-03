@@ -154,15 +154,19 @@ export class CustomersService {
   }
 
   async findAllRegistered() {
-    return await this.customerModel.find({
-      gender: { $ne: Gender.Undefined },
-    });
+    return await this.customerModel
+      .find({
+        gender: { $ne: Gender.Undefined },
+      })
+      .limit(50);
   }
 
   async findAllAdvice() {
-    return await this.customerModel.find({
-      gender: Gender.Undefined,
-    });
+    return await this.customerModel
+      .find({
+        gender: Gender.Undefined,
+      })
+      .limit(50);
   }
 
   async registeredCount(): Promise<number> {
@@ -236,7 +240,7 @@ export class CustomersService {
     return this.calculateCustomerGrowth(newCount, oldCount);
   }
 
-  @Cron(CronExpression.EVERY_10_MINUTES)
+  @Cron(CronExpression.EVERY_MINUTE)
   async reviewTotal() {
     const customers = await this.findAll();
     customers.forEach(async (customer) => {
