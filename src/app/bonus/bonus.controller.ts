@@ -17,12 +17,12 @@ import { BonusService } from './bonus.service';
 import { CreateBonusDto } from './dto/create-bonus';
 import { UpdateBonusDto } from './dto/update-bonus';
 
-@Roles(Role.Admin)
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('bonus')
 export class BonusController {
   constructor(private readonly bonusService: BonusService) {}
 
+  @Roles(Role.Admin)
   @Post()
   create(@Body() dto: CreateBonusDto, @Req() req: any) {
     dto.created_by = req.user.id;
@@ -39,6 +39,7 @@ export class BonusController {
     return this.bonusService.findOne(id);
   }
 
+  @Roles(Role.Admin)
   @Put(':id')
   update(
     @Param('id') id: string,
@@ -49,11 +50,13 @@ export class BonusController {
     return this.bonusService.update(id, dto);
   }
 
+  @Roles(Role.Admin)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.bonusService.remove(id);
   }
 
+  @Roles(Role.Admin)
   @Get(':id/customers')
   bonusCustomers(@Param('id') id: string) {
     return this.bonusService.bonusCustomers(id);
