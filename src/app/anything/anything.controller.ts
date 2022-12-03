@@ -47,4 +47,14 @@ export class AnythingController {
   remove(@Param('id') id: string) {
     return this.anythingService.remove(id);
   }
+
+  @Get('customers/:id/q1')
+  findCustomerQ1(@Param('id') id: string) {
+    return this.anythingService.findCustomerQ1(id);
+  }
+
+  @Get('customers/:id/q2')
+  findCustomerQ2(@Param('id') id: string) {
+    return this.anythingService.findCustomerQ2(id);
+  }
 }

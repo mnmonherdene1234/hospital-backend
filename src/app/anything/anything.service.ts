@@ -41,4 +41,18 @@ export class AnythingService {
   async remove(id: string) {
     return await this.anythingModel.findByIdAndDelete(id);
   }
+
+  async findCustomerQ1(customer_id: string) {
+    return await this.anythingModel.findOne({
+      'any.customer_id': customer_id,
+      'any.type': 'q1',
+    });
+  }
+
+  async findCustomerQ2(customer_id: string) {
+    return await this.anythingModel.findOne({
+      'any.customer_id': customer_id,
+      'any.type': 'q2',
+    });
+  }
 }
