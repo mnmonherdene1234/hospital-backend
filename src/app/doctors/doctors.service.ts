@@ -7,10 +7,6 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Document, Model, now, Types } from 'mongoose';
 import { Doctor, DoctorDocument } from 'src/schemas/doctor.schema';
-import {
-  TreatmentTime,
-  TreatmentTimeDocument,
-} from 'src/schemas/treatment-time.schema';
 import { Treatment, TreatmentDocument } from 'src/schemas/treatment.schema';
 import { TreatmentTimesService } from '../treatment-times/treatment-times.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';

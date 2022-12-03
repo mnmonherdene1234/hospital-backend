@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UpdateUserDto } from '../users/dto/update-user.dto';
 import { HttpService } from '@nestjs/axios';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -11,6 +12,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private readonly httpService: HttpService,
+    private readonly mailService: MailService,
   ) {}
 
   async validateUser(username: string, password: string): Promise<any> {
@@ -35,18 +37,18 @@ export class AuthService {
     return await this.usersService.update(id, updateUserDto);
   }
 
-  async resetPassword(phone: string) {
-    const user = await this.usersService.findByPhone(phone);
+  async resetPassword(email: string) {
+    const user = await this.usersService.findByEmail(email);
     if (!user) throw new UnauthorizedException();
     const password = Math.floor(Math.random() * 100000000);
     const updateUser: UpdateUserDto = new UpdateUserDto();
     updateUser.password = password.toString();
     await this.usersService.update(user.id, updateUser);
-    const message = `username: ${user.username} password: ${password}`;
 
-    await this.httpService.axiosRef.get(
-      `http://web2sms.skytel.mn/apiSend?token=de5ee98b9cba190ab23863f9d385244000a15947&sendto=${phone}&message=${message}`,
+    return this.mailService.sendUsernamePassword(
+      user.email,
+      user.username,
+      password.toString(),
     );
-    return password;
   }
 }

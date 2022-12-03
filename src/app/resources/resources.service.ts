@@ -6,6 +6,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Resource, ResourceDocument } from 'src/schemas/resource.schema';
+import { ServicesService } from '../services/services.service';
 import { CreateResourceDto } from './dto/create-resource.dto';
 import { UpdateResourceDto } from './dto/update-resource.dto';
 
@@ -14,6 +15,7 @@ export class ResourcesService {
   constructor(
     @InjectModel(Resource.schemaName)
     private readonly resourceModel: Model<ResourceDocument>,
+    private readonly servicesService: ServicesService,
   ) {}
 
   async create(createResource: CreateResourceDto) {
@@ -37,6 +39,7 @@ export class ResourcesService {
   }
 
   async remove(id: string) {
+    await this.servicesService.removeResource(id);
     return await this.resourceModel.findByIdAndDelete(id);
   }
 

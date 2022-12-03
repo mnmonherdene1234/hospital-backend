@@ -61,4 +61,17 @@ export class ServicesService {
       .find({ _id: { $in: ids } })
       .populate(['created_by', 'updated_by', 'services', 'resources.resource']);
   }
+
+  async removeResource(resource_id: string): Promise<void> {
+    await this.serviceModel.updateMany(
+      {},
+      {
+        $pull: {
+          resources: {
+            resource: resource_id,
+          },
+        },
+      },
+    );
+  }
 }

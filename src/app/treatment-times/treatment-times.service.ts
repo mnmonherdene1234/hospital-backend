@@ -71,14 +71,15 @@ export class TreatmentTimesService {
 
   async update(id: string, dto: UpdateTreatmentTimeDto) {
     await this.exists(id);
-
-    const time = await this.treatmentTimeModel.findById(id);
+    const time = await this.findOne(id);
 
     const now: Date = new Date();
     const startTime: Date = new Date(dto.start_time);
     const endTime: Date = new Date(dto.end_time);
+    const beforeEndTime: Date = new Date(time.end_time);
 
-    if (endTime < now) throw new BadRequestException('PAST_TENSE');
+    if (endTime < now && beforeEndTime < now)
+      throw new BadRequestException('PAST_TENSE');
 
     if (dto.customer_phone) {
       var customer = await this.customersService.findByPhoneOrCreate(
