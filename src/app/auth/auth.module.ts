@@ -7,16 +7,15 @@ import { LocalStrategy } from './local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { HttpModule } from '@nestjs/axios';
-import { ConfigModule } from '@nestjs/config';
 import { MailModule } from '../mail/mail.module';
+import { JWT_SECRET } from 'src/config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
     UsersModule,
     PassportModule,
     JwtModule.register({
-      secret: process.env.JWT_SECRET,
+      secret: JWT_SECRET,
     }),
     HttpModule,
     MailModule,

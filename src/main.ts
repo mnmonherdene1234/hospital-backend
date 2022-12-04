@@ -19,8 +19,8 @@ async function bootstrap() {
     }),
   );
   app.useGlobalFilters(new HttpExceptionFilter());
-  await app.listen(process.env.PORT || 64536);
+  await app.listen(64536);
   const logger: Logger = new Logger('SERVER');
-  logger.log(`Server listening on ${process.env.PORT || 64536}`);
+  logger.log(`Server listening on ${64536}`);
 }
 bootstrap();

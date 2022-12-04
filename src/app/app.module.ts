@@ -8,7 +8,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CustomersModule } from './customers/customers.module';
 import { DoctorsModule } from './doctors/doctors.module';
@@ -21,12 +20,12 @@ import { ResourcesModule } from './resources/resources.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { BonusModule } from './bonus/bonus.module';
 import { AnythingModule } from './anything/anything.module';
+import { DATABASE_NAME, MONGODB_URI } from '../config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
-    MongooseModule.forRoot(process.env.MONGODB_URI, {
-      dbName: process.env.DATABASE_NAME,
+    MongooseModule.forRoot(MONGODB_URI, {
+      dbName: DATABASE_NAME,
     }),
     ThrottlerModule.forRoot({
       ttl: 60,
