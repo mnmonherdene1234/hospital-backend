@@ -21,9 +21,13 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { BonusModule } from './bonus/bonus.module';
 import { AnythingModule } from './anything/anything.module';
 import { DATABASE_NAME, MONGODB_URI } from '../config';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     MongooseModule.forRoot(MONGODB_URI, {
       dbName: DATABASE_NAME,
     }),
