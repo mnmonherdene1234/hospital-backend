@@ -43,12 +43,15 @@ export class AuthService {
     const password = Math.floor(Math.random() * 100000000);
     const updateUser: UpdateUserDto = new UpdateUserDto();
     updateUser.password = password.toString();
-    await this.usersService.update(user.id, updateUser);
 
-    return this.mailService.sendUsernamePassword(
+    await this.mailService.sendUsernamePassword(
       user.email,
       user.username,
       password.toString(),
     );
+
+    await this.usersService.update(user.id, updateUser);
+
+    return {};
   }
 }

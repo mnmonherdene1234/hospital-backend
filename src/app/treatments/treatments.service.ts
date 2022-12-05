@@ -268,6 +268,13 @@ export class TreatmentsService {
       series.push(topSeries);
     });
 
+    if (!series) {
+      series.push({
+        name: 'Үйлчилгээ',
+        data: [0, 0, 0, 0, 0, 0, 0],
+      });
+    }
+
     return {
       series,
       categories,

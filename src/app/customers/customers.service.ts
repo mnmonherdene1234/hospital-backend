@@ -140,8 +140,8 @@ export class CustomersService {
 
     const total = male + female;
 
-    const malePercent = (male * 100) / total;
-    const femalePercent = (female * 100) / total;
+    const malePercent = (male * 100) / total ?? 0;
+    const femalePercent = (female * 100) / total ?? 0;
 
     return {
       labels: ['Эрэгтэй', 'Эмэгтэй'],
