@@ -2,15 +2,26 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, now } from 'mongoose';
 import { Anything, AnythingDocument } from 'src/schemas/anything.schema';
+import { CustomersService } from '../customers/customers.service';
 
 @Injectable()
 export class AnythingService {
   constructor(
     @InjectModel(Anything.schemaName)
     private readonly anythingModel: Model<AnythingDocument>,
+    private readonly customersService: CustomersService,
   ) {}
 
   async create(dto: any) {
+    if (dto?.any?.customer_phone) {
+      const customer = await this.customersService.findByPhoneOrCreate(
+        dto?.any?.customer_phone,
+        dto?.created_by,
+      );
+
+      dto.any.customer_id = customer.id;
+    }
+
     return await new this.anythingModel(dto).save();
   }
 
