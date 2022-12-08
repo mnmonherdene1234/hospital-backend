@@ -17,7 +17,7 @@ import { CreateResourceDto } from './dto/create-resource.dto';
 import { UpdateResourceDto } from './dto/update-resource.dto';
 import { ResourcesService } from './resources.service';
 
-@Roles(Role.Admin, Role.Worker)
+@Roles(Role.Admin)
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('resources')
 export class ResourcesController {
@@ -29,6 +29,7 @@ export class ResourcesController {
     return this.resourcesService.create(createResource);
   }
 
+  @Roles(Role.Worker)
   @Get()
   findAll() {
     return this.resourcesService.findAll();

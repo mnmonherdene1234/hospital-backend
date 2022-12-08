@@ -19,7 +19,7 @@ import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { FindAvailableDoctorsDto } from './dto/find-available.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
-@Roles(Role.Admin, Role.Worker)
+@Roles(Role.Admin)
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('doctors')
 export class DoctorsController {
@@ -56,11 +56,13 @@ export class DoctorsController {
     return this.doctorsService.remove(id);
   }
 
+  @Roles(Role.Worker)
   @Get('info/count')
   count() {
     return this.doctorsService.count();
   }
 
+  @Roles(Role.Worker)
   @Get('type/available')
   available(@Query() findAvailableDoctorsDto: FindAvailableDoctorsDto) {
     return this.doctorsService.available(findAvailableDoctorsDto);
