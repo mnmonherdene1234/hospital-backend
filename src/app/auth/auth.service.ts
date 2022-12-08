@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { UpdateUserDto } from '../users/dto/update-user.dto';
 import { HttpService } from '@nestjs/axios';
 import { MailService } from '../mail/mail.service';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -23,9 +24,12 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
+  async login(loginDto: LoginDto) {
+    const { username, password } = loginDto;
+    const user = await this.validateUser(username, password);
+    if (!user) throw new UnauthorizedException();
     return {
-      access_token: this.jwtService.sign(user),
+      access_token: this.jwtService.sign({ id: user.id }),
     };
   }
 

@@ -17,29 +17,31 @@ import { CreateResourceDto } from './dto/create-resource.dto';
 import { UpdateResourceDto } from './dto/update-resource.dto';
 import { ResourcesService } from './resources.service';
 
-@Roles(Role.Admin)
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('resources')
 export class ResourcesController {
   constructor(private readonly resourcesService: ResourcesService) {}
 
+  @Roles(Role.Admin)
   @Post()
   create(@Body() createResource: CreateResourceDto, @Req() req: any) {
     createResource.created_by = req.user.id;
     return this.resourcesService.create(createResource);
   }
 
-  @Roles(Role.Worker)
+  @Roles(Role.Admin, Role.Worker)
   @Get()
   findAll() {
     return this.resourcesService.findAll();
   }
 
+  @Roles(Role.Admin, Role.Worker)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.resourcesService.findOne(id);
   }
 
+  @Roles(Role.Admin)
   @Put(':id')
   update(
     @Param('id') id: string,
@@ -50,6 +52,7 @@ export class ResourcesController {
     return this.resourcesService.update(id, updateResource);
   }
 
+  @Roles(Role.Admin)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.resourcesService.remove(id);

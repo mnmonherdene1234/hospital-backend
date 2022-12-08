@@ -22,6 +22,7 @@ import { BonusModule } from './bonus/bonus.module';
 import { AnythingModule } from './anything/anything.module';
 import { DATABASE_NAME, MONGODB_URI } from '../config';
 import { ConfigModule } from '@nestjs/config';
+import { QuestionsModule } from './questions/questions.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { ConfigModule } from '@nestjs/config';
     ResourcesModule,
     BonusModule,
     AnythingModule,
+    QuestionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

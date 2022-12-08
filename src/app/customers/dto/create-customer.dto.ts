@@ -1,11 +1,4 @@
-import {
-  IsEmail,
-  IsEnum,
-  IsNumberString,
-  IsOptional,
-  IsString,
-  MinLength,
-} from 'class-validator';
+import { IsEnum, IsOptional, IsString, MinLength } from 'class-validator';
 import {
   BloodType,
   FamilyStatus,
@@ -24,13 +17,12 @@ export class CreateCustomerDto {
   @IsOptional()
   last_name: string;
 
-  @MinLength(8)
-  @IsNumberString()
+  @IsString()
   phone: string;
 
-  @IsEmail()
   @IsOptional()
-  email: string;
+  @IsString()
+  employment: string;
 
   @IsString()
   @IsOptional()
@@ -57,11 +49,19 @@ export class CreateCustomerDto {
 
   @IsString()
   @IsOptional()
-  address: string;
-
-  @IsString()
-  @IsOptional()
   image: string;
+
+  @IsOptional()
+  @IsString({ each: true })
+  images: string[];
+
+  @IsOptional()
+  @IsString({ each: true })
+  food_advice_images: string[];
+
+  @IsOptional()
+  @IsString({ each: true })
+  skin_care_images: string[];
 
   created_by: string;
   updated_by: string;
