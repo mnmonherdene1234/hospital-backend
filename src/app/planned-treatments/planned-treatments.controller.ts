@@ -55,4 +55,9 @@ export class PlannedTreatmentsController {
   remove(@Param('id') id: string) {
     return this.plannedTreatmentsService.remove(id);
   }
+
+  @Get('customer/:id')
+  findByCustomer(@Param('id') id: string) {
+    return this.plannedTreatmentsService.findByCustomer(id);
+  }
 }

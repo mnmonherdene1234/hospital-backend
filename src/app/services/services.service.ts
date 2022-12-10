@@ -80,14 +80,26 @@ export class ServicesService {
   }
 
   async findPackages() {
-    return await this.serviceModel.find({
-      type: ServiceType.Package,
-    });
+    return await this.serviceModel
+      .find({
+        type: ServiceType.Package,
+      })
+      .populate(['created_by', 'updated_by', 'services', 'resources.resource']);
   }
 
   async findBasic() {
-    return await this.serviceModel.find({
-      type: ServiceType.Basic,
-    });
+    return await this.serviceModel
+      .find({
+        type: ServiceType.Basic,
+      })
+      .populate(['created_by', 'updated_by', 'services', 'resources.resource']);
+  }
+
+  async findAdditional() {
+    return await this.serviceModel
+      .find({
+        type: ServiceType.Additional,
+      })
+      .populate(['created_by', 'updated_by', 'services', 'resources.resource']);
   }
 }

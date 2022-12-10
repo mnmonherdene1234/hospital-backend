@@ -3,10 +3,11 @@ import mongoose, { now } from 'mongoose';
 import { BaseSchema } from './utils/base.schema';
 import { Service } from './service.schema';
 import { Customer } from './customer.schema';
+import transform from './utils/transform';
 
 export type PlannedTreatmentDocument = PlannedTreatment & Document;
 
-@Schema()
+@Schema(transform)
 export class PlannedTreatment extends BaseSchema {
   static schemaName: string = 'planned-treatments';
 

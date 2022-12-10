@@ -52,4 +52,18 @@ export class PlannedTreatmentsService {
   async remove(id: string) {
     return await this.plannedTreatmentModel.findByIdAndDelete(id);
   }
+
+  async findByCustomer(customer_id: string) {
+    return await this.plannedTreatmentModel
+      .find({
+        customer: customer_id,
+      })
+      .populate([
+        'created_by',
+        'updated_by',
+        'customer',
+        'basic_service',
+        'additional_service',
+      ]);
+  }
 }

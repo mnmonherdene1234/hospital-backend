@@ -65,4 +65,9 @@ export class ServicesController {
   findBasic() {
     return this.servicesService.findBasic();
   }
+
+  @Get('type/additional')
+  findAdditional() {
+    return this.servicesService.findAdditional();
+  }
 }
