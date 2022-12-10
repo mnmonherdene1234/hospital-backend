@@ -55,4 +55,14 @@ export class ServicesController {
   remove(@Param('id') id: string) {
     return this.servicesService.remove(id);
   }
+
+  @Get('type/package')
+  findPackages() {
+    return this.servicesService.findPackages();
+  }
+
+  @Get('type/basic')
+  findBasic() {
+    return this.servicesService.findBasic();
+  }
 }

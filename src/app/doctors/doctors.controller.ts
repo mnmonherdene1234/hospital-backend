@@ -56,13 +56,13 @@ export class DoctorsController {
     return this.doctorsService.remove(id);
   }
 
-  @Roles(Role.Worker)
+  @Roles(Role.Admin, Role.Worker)
   @Get('info/count')
   count() {
     return this.doctorsService.count();
   }
 
-  @Roles(Role.Worker)
+  @Roles(Role.Admin, Role.Worker)
   @Get('type/available')
   available(@Query() findAvailableDoctorsDto: FindAvailableDoctorsDto) {
     return this.doctorsService.available(findAvailableDoctorsDto);

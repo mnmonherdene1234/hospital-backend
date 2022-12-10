@@ -1,7 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, now } from 'mongoose';
-import { Service, ServiceDocument } from 'src/schemas/service.schema';
+import {
+  Service,
+  ServiceDocument,
+  ServiceType,
+} from 'src/schemas/service.schema';
 import { Treatment, TreatmentDocument } from 'src/schemas/treatment.schema';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
@@ -73,5 +77,17 @@ export class ServicesService {
         },
       },
     );
+  }
+
+  async findPackages() {
+    return await this.serviceModel.find({
+      type: ServiceType.Package,
+    });
+  }
+
+  async findBasic() {
+    return await this.serviceModel.find({
+      type: ServiceType.Basic,
+    });
   }
 }

@@ -66,4 +66,11 @@ export class AnythingService {
       'any.type': 'q2',
     });
   }
+
+  async findCustomerQuestion(question_id: string, customer_id: string) {
+    return await this.anythingModel.findOne({
+      'any.question_id': question_id,
+      'any.customer_id': customer_id,
+    });
+  }
 }

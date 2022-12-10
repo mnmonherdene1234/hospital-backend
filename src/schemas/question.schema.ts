@@ -7,6 +7,7 @@ export type QuestionDocument = Question & Document;
 export enum QuestionType {
   Text = 'TEXT',
   Radio = 'RADIO',
+  Image = 'IMAGE',
 }
 
 export class QuestionData {
