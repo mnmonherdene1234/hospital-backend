@@ -1,6 +1,5 @@
 import { MongooseModule } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
-import { DATABASE_NAME, MONGODB_URI } from '../../config';
 import { User, UserSchema, Role } from '../../schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
@@ -11,9 +10,14 @@ describe('Create Admin and Worker', () => {
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
-        MongooseModule.forRoot(MONGODB_URI, {
-          dbName: DATABASE_NAME,
-        }),
+        MongooseModule.forRoot(
+          process.env.NODE_ENV == 'production'
+            ? process.env.PROD_MONGODB_URI
+            : process.env.DEV_MONGODB_URI,
+          {
+            dbName: process.env.DATABASE_NAME,
+          },
+        ),
         MongooseModule.forFeature([
           { name: User.schemaName, schema: UserSchema },
         ]),

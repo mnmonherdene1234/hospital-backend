@@ -20,7 +20,6 @@ import { ResourcesModule } from './resources/resources.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { BonusModule } from './bonus/bonus.module';
 import { AnythingModule } from './anything/anything.module';
-import { DATABASE_NAME, MONGODB_URI } from '../config';
 import { ConfigModule } from '@nestjs/config';
 import { QuestionsModule } from './questions/questions.module';
 import { PlannedTreatmentsModule } from './planned-treatments/planned-treatments.module';
@@ -30,9 +29,14 @@ import { PlannedTreatmentsModule } from './planned-treatments/planned-treatments
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    MongooseModule.forRoot(MONGODB_URI, {
-      dbName: DATABASE_NAME,
-    }),
+    MongooseModule.forRoot(
+      process.env.NODE_ENV == 'production'
+        ? process.env.PROD_MONGODB_URI
+        : process.env.DEV_MONGODB_URI,
+      {
+        dbName: process.env.DATABASE_NAME,
+      },
+    ),
     ThrottlerModule.forRoot({
       ttl: 60,
       limit: 10,
