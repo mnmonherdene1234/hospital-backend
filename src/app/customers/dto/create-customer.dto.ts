@@ -22,6 +22,10 @@ export class CreateCustomerDto {
 
   @IsOptional()
   @IsString()
+  registration_number: string;
+
+  @IsOptional()
+  @IsString()
   employment: string;
 
   @IsString()

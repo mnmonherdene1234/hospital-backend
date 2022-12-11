@@ -6,9 +6,5 @@ export class UpdateTreatmentDto extends CreateTreatmentDto {
 
   @IsOptional()
   @IsDateString()
-  start_time: Date;
-
-  @IsOptional()
-  @IsDateString()
-  end_time: Date;
+  date: Date;
 }

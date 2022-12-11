@@ -65,6 +65,11 @@ export class Customer extends BaseSchema {
   @Prop({
     type: String,
   })
+  registration_number: string;
+
+  @Prop({
+    type: String,
+  })
   employment: string;
 
   @Prop({
@@ -88,12 +93,6 @@ export class Customer extends BaseSchema {
     default: BloodType.Undefined,
   })
   blood_type: BloodType;
-
-  @Prop({
-    enum: FamilyStatus,
-    default: FamilyStatus.Undefined,
-  })
-  family_status: FamilyStatus;
 
   @Prop({
     enum: Rate,

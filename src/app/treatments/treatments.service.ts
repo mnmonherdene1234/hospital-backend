@@ -125,9 +125,6 @@ export class TreatmentsService {
     const treatment = await this.treatmentModel.findById(id);
     const now: Date = new Date();
 
-    if (treatment.end_time < now)
-      throw new BadRequestException('COMPLETED_TREATMENT');
-
     const services = await this.servicesService.findByIds(
       treatment.services as unknown as string[],
     );
