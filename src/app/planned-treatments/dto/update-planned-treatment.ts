@@ -13,12 +13,4 @@ export class UpdatePlannedTreatmentDto extends CreatePlannedTreatmentDto {
   @IsOptional()
   @IsNumber()
   basic_input: number;
-
-  @IsOptional()
-  @IsString()
-  additional_service: string;
-
-  @IsOptional()
-  @IsNumber()
-  additional_input: number;
 }

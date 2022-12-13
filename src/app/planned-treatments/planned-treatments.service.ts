@@ -16,6 +16,11 @@ export class PlannedTreatmentsService {
   ) {}
 
   async create(dto: CreatePlannedTreatmentDto) {
+    if (!dto.additional_service) {
+      delete dto.additional_service;
+      delete dto.additional_input;
+    }
+
     return await new this.plannedTreatmentModel(dto).save();
   }
 

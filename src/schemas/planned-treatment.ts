@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { now } from 'mongoose';
+import mongoose from 'mongoose';
 import { BaseSchema } from './utils/base.schema';
 import { Service } from './service.schema';
 import { Customer } from './customer.schema';

@@ -1,4 +1,4 @@
-import { IsDateString, IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreatePlannedTreatmentDto {
   @IsString()
@@ -10,9 +10,11 @@ export class CreatePlannedTreatmentDto {
   @IsNumber()
   basic_input: number;
 
+  @IsOptional()
   @IsString()
   additional_service: string;
 
+  @IsOptional()
   @IsNumber()
   additional_input: number;
 
