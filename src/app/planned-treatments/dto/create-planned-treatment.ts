@@ -16,9 +16,6 @@ export class CreatePlannedTreatmentDto {
   @IsNumber()
   additional_input: number;
 
-  @IsDateString()
-  date: Date;
-
   created_by: string;
   updated_by: string;
 }

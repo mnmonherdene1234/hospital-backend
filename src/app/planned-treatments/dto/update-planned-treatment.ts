@@ -21,8 +21,4 @@ export class UpdatePlannedTreatmentDto extends CreatePlannedTreatmentDto {
   @IsOptional()
   @IsNumber()
   additional_input: number;
-
-  @IsOptional()
-  @IsDateString()
-  date: Date;
 }

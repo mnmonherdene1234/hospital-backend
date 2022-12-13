@@ -17,30 +17,29 @@ import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 import { ServicesService } from './services.service';
 
-@Roles(Role.Admin)
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('services')
 export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
+  @Roles(Role.Admin)
   @Post()
   create(@Body() createServiceDto: CreateServiceDto, @Request() req: any) {
     createServiceDto.created_by = req.user.id;
     return this.servicesService.create(createServiceDto);
   }
 
-  @Roles(Role.Admin, Role.Worker)
   @Get()
   findAll() {
     return this.servicesService.findAll();
   }
 
-  @Roles(Role.Admin, Role.Worker)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.servicesService.findOne(id);
   }
 
+  @Roles(Role.Admin)
   @Put(':id')
   update(
     @Param('id') id: string,
@@ -51,6 +50,7 @@ export class ServicesController {
     return this.servicesService.update(id, updateServiceDto);
   }
 
+  @Roles(Role.Admin)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.servicesService.remove(id);

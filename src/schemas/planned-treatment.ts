@@ -40,12 +40,6 @@ export class PlannedTreatment extends BaseSchema {
     default: 0,
   })
   additional_input: number;
-
-  @Prop({
-    type: Date,
-    default: now(),
-  })
-  date: Date;
 }
 
 export const PlannedTreatmentSchema =
