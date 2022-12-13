@@ -26,11 +26,9 @@ export class CreateDoctorDto {
   color: string;
 
   @IsString()
-  @MinLength(8)
   @IsOptional()
   phone: string;
 
-  @IsEmail()
   @IsOptional()
   email: string;
 
@@ -42,7 +40,7 @@ export class CreateDoctorDto {
   @IsOptional()
   experiences_desc: string;
 
-  @IsUrl()
+  @IsString()
   @IsOptional()
   profile_img: string;
 

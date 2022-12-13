@@ -22,19 +22,19 @@ export class Doctor extends BaseSchema {
   static schemaName: string = 'doctors';
 
   @Prop({
-    required: true,
+    default: 'Овог',
     type: String,
   })
   first_name: string;
 
   @Prop({
-    required: true,
+    default: 'Нэр',
     type: String,
   })
   last_name: string;
 
   @Prop({
-    required: true,
+    default: 'Эмч',
     type: String,
   })
   role: string;
