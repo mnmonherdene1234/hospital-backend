@@ -55,12 +55,18 @@ export class BonusService {
         throw new NotFoundException('BONUS_NOTFOUND');
     }
 
-    if (!(await this.bonusModel.exists({ _id: id })))
+    if (
+      !(await this.bonusModel.exists({ _id: id }).catch((err) => {
+        throw err;
+      }))
+    )
       throw new NotFoundException('BONUS_NOTFOUND');
   }
 
   async bonusCustomers(bonus_id: string) {
-    await this.exists(bonus_id);
+    await this.exists(bonus_id).catch((err) => {
+      throw err;
+    });
     return await this.customersService.findByBonus(bonus_id);
   }
 

@@ -29,9 +29,15 @@ export class TreatmentsService {
   ) {}
 
   async create(dto: CreateTreatmentDto) {
-    await this.doctorsService.exists(dto.doctor);
-    await this.customersService.exists(dto.customer);
-    await this.servicesService.exists(dto.services);
+    await this.doctorsService.exists(dto.doctor).catch((err) => {
+      throw err;
+    });
+    await this.customersService.exists(dto.customer).catch((err) => {
+      throw err;
+    });
+    await this.servicesService.exists(dto.services).catch((err) => {
+      throw err;
+    });
 
     const services = await this.servicesService.findByIds(dto.services);
 
@@ -57,10 +63,11 @@ export class TreatmentsService {
     dto.services.forEach(async (service) => {
       const res = await this.servicesService.findOne(service);
       res.resources.forEach(async (resource) => {
-        await this.resourcesService.decrease(
-          resource.resource['id'],
-          resource.quantity,
-        );
+        await this.resourcesService
+          .decrease(resource.resource['id'], resource.quantity)
+          .catch((err) => {
+            throw err;
+          });
       });
     });
 
@@ -85,7 +92,9 @@ export class TreatmentsService {
   }
 
   async update(id: string, updateTreatmentDto: UpdateTreatmentDto) {
-    await this.exists(id);
+    await this.exists(id).catch((err) => {
+      throw err;
+    });
     const treatment = await this.treatmentModel.findById(id);
 
     if (updateTreatmentDto.services) {
@@ -107,10 +116,11 @@ export class TreatmentsService {
       updateTreatmentDto.services.forEach(async (service) => {
         const res = await this.servicesService.findOne(service);
         res.resources.forEach(async (resource) => {
-          await this.resourcesService.decrease(
-            resource.resource['id'],
-            resource.quantity,
-          );
+          await this.resourcesService
+            .decrease(resource.resource['id'], resource.quantity)
+            .catch((err) => {
+              throw err;
+            });
         });
       });
     }
@@ -121,7 +131,9 @@ export class TreatmentsService {
   }
 
   async remove(id: string) {
-    await this.exists(id);
+    await this.exists(id).catch((err) => {
+      throw err;
+    });
     const treatment = await this.treatmentModel.findById(id);
     const now: Date = new Date();
 

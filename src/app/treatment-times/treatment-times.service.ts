@@ -14,6 +14,7 @@ import { CustomersService } from '../customers/customers.service';
 import { CustomerSearchDto } from '../customers/dto/customer-search.dto';
 import { DoctorsService } from '../doctors/doctors.service';
 import { CreateTreatmentTimeDto } from './dto/create-treatment-time.dto';
+import { FindTreatmentTimeDto } from './dto/find-treatment-time.dto';
 import { SearchTreatmentTimeDto } from './dto/search-treatment-time.dto';
 import { UpdateTreatmentTimeDto } from './dto/update-treatment-time.dto';
 import { UserTimeDto, WeeklyTimesDto } from './dto/weekly-times.dto';
@@ -36,7 +37,9 @@ export class TreatmentTimesService {
 
     if (startTime < now) throw new BadRequestException('PAST_TENSE');
 
-    this.doctorsService.exists(dto.doctor);
+    await this.doctorsService.exists(dto.doctor).catch((err) => {
+      throw err;
+    });
 
     const doctors = await this.doctorsService.restlessDoctors(
       startTime,
@@ -55,22 +58,59 @@ export class TreatmentTimesService {
     return await new this.treatmentTimeModel(dto).save();
   }
 
-  async findAll() {
+  async findAll(dto: FindTreatmentTimeDto) {
+    const { doctor_id, customer_search, start_date, end_date } = dto;
+
+    const filter: any = {};
+
+    if (doctor_id) {
+      filter.doctor = dto.doctor_id;
+    }
+
+    const customersId: string[] = [];
+
+    if (customer_search) {
+      const customerSearch: CustomerSearchDto = {
+        email: customer_search,
+        name: customer_search,
+        phone: customer_search,
+      };
+      const customers = await this.customersService.search(customerSearch);
+
+      for (let i = 0; i < customers.length; i++) {
+        customersId.push(customers[i].id);
+      }
+
+      filter.customer = { $in: customersId };
+    }
+
+    const startDate = new Date(start_date);
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date(end_date);
+    endDate.setHours(23, 59, 59, 999);
+
+    filter.start_time = { $gte: startDate };
+    filter.end_time = { $lte: endDate };
+
     return await this.treatmentTimeModel
-      .find()
-      .populate(['doctor', 'customer', 'created_by', 'updated_by'])
+      .find(filter)
+      .populate('doctor', ['first_name', 'last_name', 'profile_img', 'role'])
+      .populate('customer', ['first_name', 'last_name', 'phone'])
       .sort('-created_at')
+      .select(['doctor', 'customer', 'start_time', 'end_time'])
       .limit(250);
   }
 
   async findOne(id: string) {
     return await this.treatmentTimeModel
       .findById(id)
-      .populate(['doctor', 'customer', 'created_by', 'updated_by']);
+      .populate(['doctor', 'customer']);
   }
 
   async update(id: string, dto: UpdateTreatmentTimeDto) {
-    await this.exists(id);
+    await this.exists(id).catch((err) => {
+      throw err;
+    });
     const time = await this.findOne(id);
 
     const now: Date = new Date();
@@ -107,7 +147,9 @@ export class TreatmentTimesService {
   }
 
   async remove(id: string) {
-    await this.exists(id);
+    await this.exists(id).catch((err) => {
+      throw err;
+    });
     const time = await this.treatmentTimeModel.findById(id);
 
     if (time.end_time < new Date()) throw new BadRequestException('PAST_TENSE');

@@ -49,14 +49,18 @@ export class ResourcesService {
   }
 
   async increase(id: string, quantity: number) {
-    await this.exists(id);
+    await this.exists(id).catch((err) => {
+      throw err;
+    });
     const resource = await this.resourceModel.findById(id);
     resource.quantity += quantity;
     return await resource.save();
   }
 
   async decrease(id: string, quantity: number) {
-    await this.exists(id);
+    await this.exists(id).catch((err) => {
+      throw err;
+    });
     const resource = await this.resourceModel.findById(id);
 
     resource.quantity -= quantity;
