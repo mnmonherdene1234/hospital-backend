@@ -61,6 +61,7 @@ export class ResourcesService {
     await this.exists(id).catch((err) => {
       throw err;
     });
+
     const resource = await this.resourceModel.findById(id);
 
     resource.quantity -= quantity;

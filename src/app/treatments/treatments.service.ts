@@ -60,14 +60,31 @@ export class TreatmentsService {
       dto.bonus = customer.bonus['id'];
     }
 
-    dto.services.forEach(async (service) => {
-      const res = await this.servicesService.findOne(service);
-      res.resources.forEach(async (resource) => {
+    for (let i = 0; i < dto.services.length; i++) {
+      const res = await this.servicesService.findOne(dto.services[i]);
+      for (let k = 0; k < res.resources.length; k++) {
         await this.resourcesService
-          .decrease(resource.resource['id'], resource.quantity)
+          .decrease(
+            res.resources[k].resource as unknown as string,
+            res.resources[k].quantity,
+          )
           .catch((err) => {
             throw err;
           });
+      }
+    }
+
+    dto.services.forEach(async (service) => {
+      const res = await this.servicesService.findOne(service);
+      res.resources.forEach(async (resource) => {
+        try {
+          await this.resourcesService.decrease(
+            resource.resource['id'],
+            resource.quantity,
+          );
+        } catch (err) {
+          return err;
+        }
       });
     });
 
