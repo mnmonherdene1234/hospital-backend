@@ -80,14 +80,15 @@ export class CustomersService {
   }
 
   async search(search: CustomerSearchDto) {
-    return await this.customerModel.find({
-      $or: [
-        { first_name: { $regex: `${search.name}`, $options: 'i' } },
-        { last_name: { $regex: `${search.name}`, $options: 'i' } },
-        { phone: { $regex: `${search.phone}`, $options: 'i' } },
-        { email: { $regex: `${search.email}`, $options: 'i' } },
-      ],
-    });
+    return await this.customerModel
+      .find({
+        $or: [
+          { first_name: { $regex: `${search.name}`, $options: 'i' } },
+          { last_name: { $regex: `${search.name}`, $options: 'i' } },
+          { phone: { $regex: `${search.phone}`, $options: 'i' } },
+        ],
+      })
+      .limit(25);
   }
 
   async pagination(pagination: CustomerPaginationDto) {
@@ -158,7 +159,8 @@ export class CustomersService {
       .find({
         gender: { $ne: Gender.Undefined },
       })
-      .limit(50);
+      .sort('-created_at')
+      .limit(20);
   }
 
   async findAllAdvice() {
