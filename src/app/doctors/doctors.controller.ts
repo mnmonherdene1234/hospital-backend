@@ -31,6 +31,7 @@ export class DoctorsController {
     return this.doctorsService.create(createDoctorDto);
   }
 
+@Roles(Role.Admin, Role.Worker)
   @Get()
   findAll() {
     return this.doctorsService.findAll();
