@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsDate, IsString } from 'class-validator';
 
 export class CreateTreatmentTimeDto {
   @IsString()
@@ -7,10 +7,10 @@ export class CreateTreatmentTimeDto {
   @IsString()
   customer_phone: string;
 
-  @IsString()
+  @IsDate()
   start_time: Date;
 
-  @IsString()
+  @IsDate()
   end_time: Date;
 
   customer: string;

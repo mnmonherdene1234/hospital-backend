@@ -1,4 +1,4 @@
-import { IsDateString, IsObject, IsOptional, IsString } from 'class-validator';
+import { IsDate, IsOptional, IsString } from 'class-validator';
 
 export class FindTreatmentTimeDto {
   @IsString()
@@ -9,9 +9,9 @@ export class FindTreatmentTimeDto {
   @IsOptional()
   customer_search: string;
 
-  @IsDateString()
+  @IsDate()
   start_date: Date;
 
-  @IsDateString()
+  @IsDate()
   end_date: Date;
 }
