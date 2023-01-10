@@ -152,7 +152,6 @@ export class TreatmentsService {
       throw err;
     });
     const treatment = await this.treatmentModel.findById(id);
-    const now: Date = new Date();
 
     const services = await this.servicesService.findByIds(
       treatment.services as unknown as string[],
