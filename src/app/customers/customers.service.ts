@@ -95,25 +95,27 @@ export class CustomersService {
     const { page, page_size, gender, rate, type, search } = pagination;
     const filter: any = {};
 
-    if (search)
+    if (search) {
       filter.$or = [
         { first_name: { $regex: `${search}`, $options: 'i' } },
         { last_name: { $regex: `${search}`, $options: 'i' } },
         { phone: { $regex: `${search}`, $options: 'i' } },
       ];
+    } else {
+      if (gender != Gender.All) filter.gender = gender;
 
-    if (gender != Gender.All) filter.gender = gender;
+      if (rate != Rate.All) filter.rate = rate;
 
-    if (rate != Rate.All) filter.rate = rate;
-
-    if (type == CustomerType.Registered)
-      filter.gender = { $ne: Gender.Undefined };
-    else if (type == CustomerType.Advice) filter.gender = Gender.Undefined;
+      if (type == CustomerType.Registered)
+        filter.gender = { $ne: Gender.Undefined };
+      else if (type == CustomerType.Advice) filter.gender = Gender.Undefined;
+    }
 
     const data = await this.customerModel
       .find(filter)
       .skip((page - 1) * page_size)
-      .limit(page_size).select("first_name last_name rate gender phone image")
+      .limit(page_size)
+      .select('first_name last_name rate gender phone image')
       .sort('-created_at');
 
     const total = await this.customerModel.count(filter);
