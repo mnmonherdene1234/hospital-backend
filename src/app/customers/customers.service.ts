@@ -93,14 +93,16 @@ export class CustomersService {
 
   async pagination(pagination: CustomerPaginationDto) {
     const { page, page_size, gender, rate, type, search } = pagination;
-    const filter: any = {};
+    let filter: any = {};
 
     if (search) {
-      filter.$or = [
-        { first_name: { $regex: `${search}`, $options: 'i' } },
-        { last_name: { $regex: `${search}`, $options: 'i' } },
-        { phone: { $regex: `${search}`, $options: 'i' } },
-      ];
+      filter = {
+        $or: [
+          { first_name: { $regex: `${search}`, $options: 'i' } },
+          { last_name: { $regex: `${search}`, $options: 'i' } },
+          { phone: { $regex: `${search}`, $options: 'i' } },
+        ],
+      };
     } else {
       if (gender != Gender.All) filter.gender = gender;
 
