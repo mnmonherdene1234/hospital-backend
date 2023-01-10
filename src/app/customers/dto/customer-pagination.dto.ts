@@ -1,8 +1,12 @@
 import { Type } from 'class-transformer';
-import { IsEnum, IsNumber, IsOptional } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 import { CustomerType, Gender, Rate } from 'src/schemas/customer.schema';
 
 export class CustomerPaginationDto {
+  @IsString()
+  @IsOptional()
+  search: string;
+
   @IsOptional()
   @IsEnum(Gender)
   gender: Gender;
