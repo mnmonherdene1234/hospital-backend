@@ -113,8 +113,7 @@ export class CustomersService {
     const data = await this.customerModel
       .find(filter)
       .skip((page - 1) * page_size)
-      .limit(page_size)
-      .populate(['created_by', 'updated_by', 'bonus'])
+      .limit(page_size).select("first_name last_name rate gender phone image")
       .sort('-created_at');
 
     const total = await this.customerModel.count(filter);
