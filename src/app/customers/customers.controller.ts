@@ -67,6 +67,11 @@ export class CustomersController {
     return this.customersService.findAllAdvice();
   }
 
+  @Get('find-by-phone/:phone')
+  findByPhone(@Param('phone') phone: string) {
+    return this.customersService.findByPhone(phone);
+  }
+
   @Get('info/count')
   count() {
     return this.customersService.count();
